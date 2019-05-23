@@ -37,9 +37,11 @@
           </el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 60px">
-          <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
+            <!-- <router-link to="/home"> -->
+          <el-button style="width: 100%" type="primary" :loading="loading" @click="gogogo">
             登录
           </el-button>
+          <!-- </router-link> -->
         </el-form-item>
       </el-form>
     </el-card>
@@ -48,6 +50,7 @@
 </template>
 
 <script>
+  import qs from 'qs'
   import {isvalidUsername} from '@/utils/validate';
   import {setSupport,getSupport,SupportUrl} from '@/utils/support';
   import login_center_bg from './imgs/login_center_bg.png'
@@ -92,27 +95,54 @@
           this.pwdType = 'password'
         }
       },
-      handleLogin() {
-        console.log(this.$refs.loginForm.validate)
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-            let isSupport = getSupport();
-            if(isSupport===undefined||isSupport==null){
-              this.dialogVisible =true;
-              return;
-            }
-            this.loading = true;
-            // this.$store.dispatch('Login', this.loginForm).then(() => {
-            //   this.loading = false;
-              this.$router.push({path: '/'})
-            // }).catch(() => {
-            //   this.loading = false
-            // })
-          } else {
-            console.log('参数验证不合法！');
-            return false
+      gogogo() {
+        // api/AdminManager/AdminList
+      //   this.$axios.get('http://192.168.84.170:9005/api/AdminManager/AdminList', {  
+      //   //params参数必写 , 如果没有参数传{}也可以
+      //     params:{  
+      //       selectPageNum:1,
+      //       everyPageNum:10
+      //     }
+      // })
+
+        this.$axios.post('http://192.168.84.170:9005/api/AdminManager/Login', {  
+        //params参数必写 , 如果没有参数传{}也可以
+          params:{  
+            account:"yxh",
+            passwd:"21232f297a57a5a743894a0e4a801fc3"
           }
         })
+        .then((res)=>{
+          console.log(res)
+          if(res.data.code==1){
+            this.$cookies.set("g_userName", 'admin')
+            this.$router.push({path: '/'})
+          }
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+
+        // console.log(this.$refs.loginForm.validate)
+        // this.$refs.loginForm.validate(valid => {
+        //   if (valid) {
+        //     let isSupport = getSupport();
+        //     if(isSupport===undefined||isSupport==null){
+        //       this.dialogVisible =true;
+        //       return;
+        //     }
+        //     this.loading = true;
+        //     // this.$store.dispatch('Login', this.loginForm).then(() => {
+        //     //   this.loading = false;
+        //       this.$router.push({path: '/'})
+        //     // }).catch(() => {
+        //     //   this.loading = false
+        //     // })
+        //   } else {
+        //     console.log('参数验证不合法！');
+        //     return false
+        //   }
+        // })
       },
       dialogConfirm(){
         this.dialogVisible =false;
