@@ -4,11 +4,14 @@
     <!-- <transition-group name="fade"> -->
     <router-view/>
     <!-- <router-view name="Login" style=""></router-view> -->
-    <router-view name="header" style=""></router-view>
-    <router-view name="main" style=""></router-view>
-    <router-view name="footer" style=""></router-view>
+    <router-view name="nav" style=""></router-view>
+    <div class="body_main"> 
+      <router-view name="sidebar" style=""></router-view>
+      <router-view name="main" style=""></router-view>
+    </div>
+    
     <!-- </transition-group> -->
-    <p>导航 ：
+    <!-- <p>导航 ：
       <router-link to="/">首页</router-link>
       <router-link to="/helloworld">helloworld页面</router-link> |
       <router-link to="/hi">Hi页面</router-link> |
@@ -17,10 +20,10 @@
       <router-link to="/params/198/jspang website is very good">params</router-link> |
       <router-link to="/bbbbbb">我是瞎写的</router-link> |
       <router-link to="/count">计数</router-link> |
-    </p>
-    <p>{{ $route.name}}</p>
-    <button @click="goback">后退</button>
-    <button @click="gohome">gohome</button>
+    </p> -->
+    <!-- <b>{{ $route.name}}</b> -->
+    <!-- <button @click="goback">后退</button>
+    <button @click="gohome">gohome</button> -->
   </div>
 </template>
 
@@ -50,12 +53,18 @@ export default {
   margin: 0;
   padding:0;
 }
+html,body{
+  width:100%;
+  height: 100%;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width:100%;
+  height: 100%;
 }
 .fade-enter {
   opacity:0;
@@ -69,5 +78,25 @@ export default {
 .fade-leave-active{
   opacity:0;
   transition:opacity .5s;
+}
+.nav{
+  border-bottom:1px solid saddlebrown;
+
+}
+.body_main{
+  width:100%;
+  height: 100%;
+  display: flex;
+}
+.side{
+  border-right: solid 1px #e6e6e6;
+  box-sizing:border-box;
+  height: 100%;
+  background: #545c64;
+}
+.main{
+  min-width: 840px;
+  width:80%;
+  flex: 1;
 }
 </style>

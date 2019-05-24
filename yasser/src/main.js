@@ -16,8 +16,9 @@ Vue.prototype.$axios = axios; //添加axios到Vue的原型对象上
 Vue.use(ElementUI,{ size: 'small', zIndex: 3000 });
 Vue.config.productionTip = false
 
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
+import cookies from 'vue-cookies'
+// Vue.prototype.$cookie = cookies;
+Vue.use(cookies)
 
 /* eslint-disable no-new */
 new Vue({

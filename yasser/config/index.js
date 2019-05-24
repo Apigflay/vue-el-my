@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {  
-        // target: 'https://api.itooi.cn',  
+        // target: 'http://192.168.84.170:9005',  
         target: '',  
         changeOrigin: true,  
         pathRewrite: {  

@@ -104,14 +104,22 @@
       //       everyPageNum:10
       //     }
       // })
-
-        this.$axios.post('http://192.168.84.170:9005/api/AdminManager/Login', {  
+        this.$axios({  
+          url: '/api/AdminManager/Login',
+          method: 'post',
         //params参数必写 , 如果没有参数传{}也可以
-          params:{  
+          data:{  
             account:"yxh",
             passwd:"21232f297a57a5a743894a0e4a801fc3"
           }
         })
+        // this.$axios.post('http://192.168.84.170:9005/api/AdminManager/Login', {  
+        // //params参数必写 , 如果没有参数传{}也可以
+        //   params:{  
+        //     account:"yxh",
+        //     passwd:"21232f297a57a5a743894a0e4a801fc3"
+        //   }
+        // })
         .then((res)=>{
           console.log(res)
           if(res.data.code==1){
