@@ -123,6 +123,7 @@
         .then((res)=>{
           console.log(res)
           if(res.data.code==1){
+            localStorage.setItem("g_userName", 'admin')
             this.$cookies.set("g_userName", 'admin')
             this.$router.push({path: '/'})
           }

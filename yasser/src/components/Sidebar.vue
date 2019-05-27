@@ -17,9 +17,18 @@
             </template>
             <el-menu-item-group>
             <!-- <span slot="title">分组一</span> -->
-            <el-menu-item index="1-1">操作员管理</el-menu-item>
-            <el-menu-item index="1-2">权限管理</el-menu-item>
-            <el-menu-item index="1-3">角色管理</el-menu-item>
+            <router-link to="/privilege">
+                <el-menu-item index="1-1">操作员管理</el-menu-item>
+            </router-link>
+            <router-link to="/privilege">
+                <el-menu-item index="1-2">权限管理</el-menu-item>
+            </router-link>
+            <router-link to="/privilege">
+                <el-menu-item index="1-3">角色管理</el-menu-item>
+            </router-link>
+            
+            
+            
             </el-menu-item-group>
         </el-submenu>
         <el-menu-item index="2">
