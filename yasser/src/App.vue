@@ -80,12 +80,17 @@ html,body{
   transition:opacity .5s;
 }
 .nav{
-  border-bottom:1px solid saddlebrown;
+  /* border-bottom:1px solid saddlebrown; */
+  height: 8%;
+  /* position: absolute; */
+  /* top: 0; */
+  /* left: 0; */
+  /* z-index: 999; */
 
 }
 .body_main{
   width:100%;
-  height: 100%;
+  height: 90%;
   display: flex;
 }
 .side{
@@ -98,5 +103,6 @@ html,body{
   min-width: 840px;
   width:80%;
   flex: 1;
+  /* padding-bottom: 50px; */
 }
 </style>

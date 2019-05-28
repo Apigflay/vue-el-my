@@ -1,9 +1,17 @@
 <template> 
     <div class="main">
         <div class="block" style="padding:30px 0px 30px 50px">
-          <span class="demonstration">功能名称</span>
+          <span class="demonstration">日期范围：</span>
+          <el-date-picker
+            v-model="value1"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
           <el-input v-model="input"
-            placeholder="输入功能节点编号"
+            placeholder="输入角色编号、名称"
             size="medium"
             style="width:330px"
           ></el-input>
@@ -12,7 +20,7 @@
         <div class="block2" style="padding:30px 0px 30px 50px">
             <el-button type="primary" icon="el-icon-search">批量删除</el-button>
             <el-button type="primary" icon="el-icon-search">操作员列表</el-button>
-            <el-button type="primary" icon="el-icon-search" @click="goAdd">新增操作员</el-button>
+            <el-button type="primary" icon="el-icon-search">新增操作员</el-button>
             共有数据  {{allCount}}  条
         </div>
 
@@ -26,35 +34,31 @@
                 type="selection">
               </el-table-column>
 
-              <!-- 功能编号 -->
+              <!-- 角色编号 -->
               <el-table-column
-                label="功能编号"
+                label="角色编号"
+                width=""
                 sortable
                 prop="id">
               </el-table-column>
-              <!-- 功能名称 -->
+              <!-- 角色名称 -->
               <el-table-column
-                label="功能名称"
-                width="250"
+                label="角色名称"
+                width=""
                 sortable
-                prop="name">
-              </el-table-column>
-              <!-- 上级编号 -->
-              <el-table-column
-                label="上级编号"
-                sortable
-                prop="parentId">
+                prop="role_name">
               </el-table-column>
               <!-- 状态 -->
               <el-table-column
                 label="状态"
+                width="150"
                 sortable
-                prop="isDel">
+                prop="is_del1">
               </el-table-column>
               <!-- 操作时间 -->
               <el-table-column
                 label="操作时间"
-                width="150"
+                width=""
                 sortable
                 prop="update_time">
               </el-table-column>
@@ -62,7 +66,7 @@
               <el-table-column
                 fixed="right"
                 label="操作"
-                width="200">
+                width="">
                 <template slot-scope="scope">
                   <el-button prop="isDel" @click="goStop(scope.row)" type="text" size="small">停/启用</el-button>
                   <el-button type="text" size="small" @click="goEdit(scope.row)">编辑</el-button>
@@ -92,47 +96,15 @@
         <div class="pop" v-if="showNone">
             <el-form model="ruleForm" rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <!--  -->
-                <el-form-item label="功能编号" prop="id">
-                  <el-input v-model="id" placeholder="请输入功能编号" disabled="true"></el-input>
+                <el-form-item label="角色编号" prop="id">
+                  <el-input v-model="id" placeholder="请输入角色编号" ></el-input>
                 </el-form-item>
-                <el-form-item label="功能名称" prop="name">
-                  <el-input v-model="name" placeholder="请输入功能名称" size="small"></el-input>
-                </el-form-item>
-                <el-form-item label="上级编号" prop="parentId">
-                  <el-input v-model="parentId" placeholder="请输入上级编号 只支持数字" size="mini"></el-input>
+                <el-form-item label="角色名称" prop="name">
+                  <el-input v-model="role_name" placeholder="请输入角色名称" size="small"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" prop="isDel">
-                  <el-input v-model="isDel" placeholder="1停用 0启用"></el-input>
+                  <el-input v-model="is_del" placeholder="1停用 0启用"></el-input>
                 </el-form-item>
-                <el-form-item label="叶子节点" prop="isLeaf">
-                  <el-input v-model="isLeaf" placeholder="0-否；1-是" disabled="true"></el-input>
-                </el-form-item>
-                <el-form-item label="菜单/按钮" prop="type">
-                  <el-input v-model="type" placeholder="1-菜单  2-按钮" disabled="true"></el-input>
-                </el-form-item>
-                <el-form-item label="显示顺序" prop="displayOrder">
-                  <el-input v-model="displayOrder" placeholder="默认为1" disabled="true"></el-input>
-                </el-form-item>
-                
-                
-                <!-- id: 2               功能编号
-                name: "管理员管理"      功能名称
-                parentId: 1             上级编号
-                isDel: "启用"        状态
-                isLeaf: 0             叶子节点 0-否；1-是  
-                type: 1                 菜单/按钮
-                displayOrder: 1     显示顺序
-                
-                create_time: null   创建时间
-                update_time: null       更新时间
-                urlOrClass: "/SysOperator/List"    url -->
-
-              <!--  -->
-              
-              
-              
-              
-              
               
               <el-form-item>
                 <el-button type="primary" @click="goKeep">保存</el-button>
@@ -165,6 +137,7 @@
         input: '',//搜索双向绑定
         row:null,//被点击行的数据
         showNone:false,//遮罩层的隐藏
+        value1: '',//搜索日期
         gridData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -197,7 +170,7 @@
             }
           }]
         },
-        value1: '',
+        
         value2: '',
         
 
@@ -209,17 +182,12 @@
         search: '',
 
       // -----
-      id: null ,             // 功能编号
-      name: null,   //   功能名称
-      parentId: null  ,         //  上级编号
-      isDel: null  ,    //  状态 1停用 0正常 
-      isLeaf: null  ,         //  叶子节点 0-否；1-是  
-      type: null  ,            //   菜单/按钮
-      displayOrder: null ,   // 显示顺序
-      
+      id: null ,             // 角色编号
+      role_name: null,   //   角色名称
+      is_del: null  ,    //  状态 1停用 0正常 
       create_time: null , // 创建时间
       update_time: null , //     更新时间
-      urlOrClass: null,//    url
+    
       ruleForm: {
          
         },
@@ -250,7 +218,7 @@
       }
     },
     created() {
-      this.getPrivilegeList();
+      this.getRoleList();
       // this.getBrandList();
       // this.getProductCateList();
     },
@@ -262,87 +230,88 @@
     },
     methods: {
       //获取权限列表信息
-      getPrivilegeList:function(){
+      getRoleList:function(){
         let token =localStorage.getItem('g_token');
         this.$axios({  
-          url: '/api/AdminManager/MenuList?nodeId=0',
+          url: '/api/AdminManager/RoleList',
           method: 'get',
+          //params参数必写 , 如果没有参数传{}也可以
           headers:{
-              Authorization:'Bearer '+token
+                Authorization:'Bearer '+token
           },
-        //params参数必写 , 如果没有参数传{}也可以
-          data:{
+          data:{  
           }
         })
         .then((res)=>{
-          console.log(res)
-          console.log(res.data.data)
-          console.log(res.data.count[0].allcount)
           if(res.data.code==1){
-            this.privilegeList=res.data.data //zong列表信息
-            this.allCount=res.data.count[0].allcount //zong条数
+            this.privilegeList=res.data.data; //zong列表信息
+            this.allCount=res.data.count[0].allcount; //zong条数
           }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
                 localStorage.removeItem('g_token');
                 this.$router.push({path: '/login'});
           }else{
-            this.$message(res.data.msg);
+            this.$message(res.msg);
           }
         })
         .catch((err)=>{
-          console.log(err)
+           console.log(err)
         })
       },
       //搜索id
       goSearchId:function(){
-        let token =localStorage.getItem('g_token');
-        this.$axios({  
-          url: '/api/AdminManager/MenuList?nodeId='+this.input,
-          method: 'get',
-        //params参数必写 , 如果没有参数传{}也可以
-          headers:{
-              Authorization:'Bearer '+token
-          },
-          data:{  
-            nodeId:this.input
-          }
-        })
-        .then((res)=>{
-          console.log(res.data)
-          // console.log(res.data.count[0].allcount)
-          if(res.data.code==1){
-            this.privilegeList=res.data.data //查询成功重新赋值列表信息
-            this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-          }else if(res.data.code==-4){
+          let token =localStorage.getItem('g_token');
+          console.log(this.value1)
+        if(this.value1==false){
+            this.$message("日期不能为空");
+        }else{
+            this.$axios({  ///api/AdminManager/RoleList?selectPageNum=1&everyPageNum=10&name=&startTime=2019-05-15&endTime=2019-05-16
+                url: '/api/AdminManager/RoleList?startTime='+this.value1[0]+'&endTime='+this.value1[1]+'&name='+this.input,
+                method: 'get',
+                //params参数必写 , 如果没有参数传{}也可以
+                headers:{
+                    Authorization:'Bearer '+token
+                },
+                data:{  
+                }
+                })
+                .then((res)=>{
+                console.log(res.data)
+                // console.log(res.data.count[0].allcount)
+                if(res.data.code==1){
+                    this.privilegeList=res.data.data //查询成功重新赋值列表信息
+                    this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
+                }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
                 localStorage.removeItem('g_token');
                 this.$router.push({path: '/login'});
           }else{
-            this.$message(res.data.success[0].msg);
-          }
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
+                    this.$message(res.data.success[0].msg);
+                }
+                })
+                .catch((err)=>{
+                    console.log(err)
+                })
+        }
       },
       //删除一条
       goDelete:function(row){
-         let token =localStorage.getItem('g_token');
-        console.log(token);
+          let token =localStorage.getItem('g_token');
+        console.log(row);
         // console.log(this.row)
         // console.log(222)
         this.$axios({  
-          url: '/api/AdminManager/ChangeMenuState',
+          url: '/api/AdminManager/ChangeRoleState',
           method: 'post',
         //params参数必写 , 如果没有参数传{}也可以
           headers:{
-              Authorization:'Bearer '+token
+                    Authorization:'Bearer '+token
           }, 
           data:{ 
             type:3,
-            id:row.id
+            nodeId:row.id
           }
         })
         .then((res)=>{
@@ -351,7 +320,6 @@
           if(res.data.code==1){
             // this.privilegeList=res.data.data //查询成功重新赋值列表信息
             // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-            location.reload()
           }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -362,33 +330,20 @@
           }
         })
         .catch((err)=>{
-          console.log(err)
+            console.log(err)
         })
-      },
-      //新增一条
-      goAdd:function(){
-          let token =localStorage.getItem('g_token');
-          this.showNone=true;
-
-          this.id=null;
-          this.name=null;
-          this.parentId=null;
-          this.isDel=null;
-          this.isLeaf=null;
-          this.type=null;
-          this.displayOrder=null;
       },
       //  停用？启用
       goStop:function(row){
-         let token =localStorage.getItem('g_token');
+          let token =localStorage.getItem('g_token');
         if(row.isDel=="启用"){
             this.$axios({  
-              url: '/api/AdminManager/ChangeMenuState',
+              url: '/api/AdminManager/ChangeRoleState',
               method: 'post',
-            //params参数必写 , 如果没有参数传{}也可以
+            //params参数必写 , 如果没有参数传{}也可以 
               headers:{
-                  Authorization:'Bearer '+token
-              }, 
+                    Authorization:'Bearer '+token
+              },
               data:{ 
                 type:2,
                 nodeId:row.id
@@ -410,16 +365,16 @@
               }
             })
             .catch((err)=>{
-              console.log(err)
+               console.log(err)
             })
         }else{
             this.$axios({  
-              url: '/api/AdminManager/ChangeMenuState',
+              url: '/api/AdminManager/ChangeRoleState',
               method: 'post',
-            //params参数必写 , 如果没有参数传{}也可以 
+            //params参数必写 , 如果没有参数传{}也可以
               headers:{
-                  Authorization:'Bearer '+token
-              },
+                    Authorization:'Bearer '+token
+              }, 
               data:{ 
                 type:1,
                 nodeId:row.id
@@ -441,7 +396,7 @@
               }
             })
             .catch((err)=>{
-              console.log(err)
+                console.log(err)
             })
         }
         console.log(row);
@@ -454,35 +409,28 @@
         console.log(this.row)
 
         this.id=row.id;
-        this.name=row.name;
-        this.parentId=row.parentId;
-        this.isDel=row.isDel;
-        this.isLeaf=row.isLeaf;
-        this.type=row.type;
-        this.displayOrder=row.displayOrder;    
+        this.role_name=row.role_name;
+        this.is_del=row.is_del;
+        this.update_time=row.update_time;    
       },
       //保存
       goKeep:function(){
-         let token =localStorage.getItem('g_token');
+          let token =localStorage.getItem('g_token');
+          console.log(this.is_del)
           this.$axios({  
-              url: '/api/AdminManager/ChangeMenu',
+              url: '/api/AdminManager/ChangeRole',
               method: 'post',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
-                  Authorization:'Bearer '+token,
+                    Authorization:'Bearer '+token
               },
               data:{   
-                // id:this.id,             // 功能编号
-                name: this.name,   //   功能名称
-                parentId: Number(this.parentId),         //  上级编号
-                isDel: Number(this.isDel)  ,    //  状态 1停用 0正常    1启用  2   停用
+                id:this.id,             // 功能编号
+                role_name: this.role_name,   //   功能名称
+                is_del: Number(this.is_del)  ,    //  状态 1停用 0正常 
 
-                isLeaf: null ,         //  叶子节点 0-否；1-是  
-                type: null  ,            //   菜单/按钮
-                displayOrder: 1 ,   // 显示顺序
                 create_time: null , // 创建时间
                 update_time: null , //     更新时间
-                urlOrClass: null,//    url
               }
             })
             .then((res)=>{
@@ -491,18 +439,17 @@
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-                // location.reload()
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
                 localStorage.removeItem('g_token');
                 this.$router.push({path: '/login'});
-              }else{
-                    this.$message(res.data.success[0].msg);
+          }else{
+                this.$message(res.data.success[0].msg);
               }
             })
             .catch((err)=>{
-              console.log(err)
+                   console.log(err)
             })
       },
       //关闭编辑弹框
@@ -539,7 +486,6 @@
 .main{
     /* flex: 1; */
     position: relative;
-    /* overflow: scroll; */
 }
 .marsk{
   position: absolute;

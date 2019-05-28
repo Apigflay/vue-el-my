@@ -23,7 +23,7 @@
             <router-link to="/privilege">
                 <el-menu-item index="1-2">权限管理</el-menu-item>
             </router-link>
-            <router-link to="/privilege">
+            <router-link to="/role">
                 <el-menu-item index="1-3">角色管理</el-menu-item>
             </router-link>
             
@@ -119,10 +119,11 @@
     top: 0px;
     height: 35px;
     width: 35px;
-    right: -30px;
+    right: -34px;
     font-size: 30px;
     background: #cecece;
     cursor: pointer;
+    z-index: 10001;
 }
 </style>
 

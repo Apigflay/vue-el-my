@@ -15,6 +15,7 @@ import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
 import Dask from '@/components/Dask'
 import Privilege from '@/components/Privilege' //权限管理
+import Role from '@/components/Role' //权限管理
 Vue.use(Router)
 
 // import VueCookies from 'vue-cookies'
@@ -77,11 +78,11 @@ const router= new Router({
       }
     },
     {
-      path: '/privilege',//角色管理
-      name: 'Privilege',
+      path: '/role',//角色管理
+      name: 'Role',
       components: {
         nav:Nav,
-        main:Privilege,
+        main:Role,
         sidebar:Sidebar
       }
     },
@@ -155,7 +156,7 @@ router.beforeEach((to, from, next) => {
   // from: Route: 当前导航正要离开的路由
   // next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
  
-  const nextRoute = ['Index', 'Count', 'HelloWorld'];
+  const nextRoute = ['Index', 'Count', 'HelloWorld','Privilege','Role'];
   // console.log(document.cookie())
   // let isLogin = false
   let isLogin=localStorage.getItem("g_userName");// 是否登录

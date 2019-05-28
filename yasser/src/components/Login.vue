@@ -105,7 +105,7 @@
       //     }
       // })
         this.$axios({  
-          url: '/api/AdminManager/Login',
+          url: '/api/Auto',
           method: 'post',
         //params参数必写 , 如果没有参数传{}也可以
           data:{  
@@ -123,9 +123,10 @@
         .then((res)=>{
           console.log(res)
           if(res.data.code==1){
-            localStorage.setItem("g_userName", 'admin')
-            this.$cookies.set("g_userName", 'admin')
-            this.$router.push({path: '/'})
+            localStorage.setItem("g_token",res.data.data.token);
+            localStorage.setItem("g_userName", 'admin');
+            this.$cookies.set("g_userName", 'admin');
+            this.$router.push({path: '/'});
           }
         })
         .catch((err)=>{
