@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "element-ui": "^2.8.2",
     "js-cookie": "^2.2.0",
+    "js-md5": "^0.7.3",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "svg-sprite-loader": "^4.1.6",

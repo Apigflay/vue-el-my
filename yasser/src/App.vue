@@ -100,6 +100,7 @@ html,body{
   background: #545c64;
 }
 .main{
+  overflow:scroll;
   min-width: 840px;
   width:80%;
   flex: 1;

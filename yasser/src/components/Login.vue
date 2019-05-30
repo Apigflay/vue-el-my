@@ -2,18 +2,16 @@
   <div>
     <el-card class="login-form-layout">
       <el-form autoComplete="on"
-               :model="loginForm"
-               :rules="loginRules"
                ref="loginForm"
                label-position="left">
         <div style="text-align: center">
           <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EFF"></svg-icon>
         </div>
-        <h2 class="login-title color-main">mall-admin-web</h2>
+        <h2 class="login-title color-main">后台管理</h2>
         <el-form-item prop="username">
           <el-input name="username"
                     type="text"
-                    v-model="loginForm.username"
+                    v-model="username"
                     autoComplete="on"
                     placeholder="请输入用户名">
           <span slot="prefix">
@@ -25,7 +23,7 @@
           <el-input name="password"
                     :type="pwdType"
                     @keyup.enter.native="handleLogin"
-                    v-model="loginForm.password"
+                    v-model="password"
                     autoComplete="on"
                     placeholder="请输入密码">
           <span slot="prefix">
@@ -38,7 +36,7 @@
         </el-form-item>
         <el-form-item style="margin-bottom: 60px">
             <!-- <router-link to="/home"> -->
-          <el-button style="width: 100%" type="primary" :loading="loading" @click="gogogo">
+          <el-button style="width: 100%" type="primary" :loading="loading" @click="goLogin">
             登录
           </el-button>
           <!-- </router-link> -->
@@ -50,7 +48,7 @@
 </template>
 
 <script>
-  import qs from 'qs'
+  import md5 from 'js-md5';
   import {isvalidUsername} from '@/utils/validate';
   import {setSupport,getSupport,SupportUrl} from '@/utils/support';
   import login_center_bg from './imgs/login_center_bg.png'
@@ -58,29 +56,31 @@
   export default {
     name: 'login',
     data() {
-      const validateUsername = (rule, value, callback) => {
-        if (!isvalidUsername(value)) {
-          callback(new Error('请输入正确的用户名'))
-        } else {
-          callback()
-        }
-      };
-      const validatePass = (rule, value, callback) => {
-        if (value.length < 3) {
-          callback(new Error('密码不能小于3位'))
-        } else {
-          callback()
-        }
-      };
+      // const validateUsername = (rule, value, callback) => {
+      //   if (!isvalidUsername(value)) {
+      //     callback(new Error('请输入正确的用户名'))
+      //   } else {
+      //     callback()
+      //   }
+      // };
+      // const validatePass = (rule, value, callback) => {
+      //   if (value.length < 3) {
+      //     callback(new Error('密码不能小于3位'))
+      //   } else {
+      //     callback()
+      //   }
+      // };
       return {
-        loginForm: {
-          username: 'admin',
-          password: '123456',
-        },
-        loginRules: {
-          username: [{required: true, trigger: 'blur', validator: validateUsername}],
-          password: [{required: true, trigger: 'blur', validator: validatePass}]
-        },
+        username:null,
+        password:null,
+        // loginForm: {
+        //   username: 'admin',
+        //   password: '123456',
+        // },
+        // loginRules: {
+        //   username: [{required: true, trigger: 'blur', validator: validateUsername}],
+        //   password: [{required: true, trigger: 'blur', validator: validatePass}]
+        // },
         loading: false,
         pwdType: 'password',
         login_center_bg,
@@ -95,22 +95,17 @@
           this.pwdType = 'password'
         }
       },
-      gogogo() {
-        // api/AdminManager/AdminList
-      //   this.$axios.get('http://192.168.84.170:9005/api/AdminManager/AdminList', {  
-      //   //params参数必写 , 如果没有参数传{}也可以
-      //     params:{  
-      //       selectPageNum:1,
-      //       everyPageNum:10
-      //     }
-      // })
+      goLogin() {
+        // console.log(this.username);
+        // console.log(this.password);
+        // console.log(md5(this.password));
         this.$axios({  
           url: '/api/Auto',
           method: 'post',
         //params参数必写 , 如果没有参数传{}也可以
           data:{  
-            account:"yxh",
-            passwd:"21232f297a57a5a743894a0e4a801fc3"
+            account:this.username,
+            passwd:md5(this.password)
           }
         })
         // this.$axios.post('http://192.168.84.170:9005/api/AdminManager/Login', {  
@@ -121,38 +116,26 @@
         //   }
         // })
         .then((res)=>{
-          console.log(res)
-          if(res.data.code==1){
-            localStorage.setItem("g_token",res.data.data.token);
+          // console.log(res)
+          // console.log(res.data.token)
+          if(res.data.code==1){ 
+            localStorage.setItem("g_token",res.data.token);
             localStorage.setItem("g_userName", 'admin');
-            this.$cookies.set("g_userName", 'admin');
+            localStorage.setItem("g_router", JSON.stringify(res.data.data));
+            // this.$cookies.set("g_userName", 'admin');
             this.$router.push({path: '/'});
+          }else if(res.data.code==-1){
+            localStorage.setItem("g_token",res.data.token);
+            localStorage.setItem("g_userName", 'admin');
+            // this.$cookies.set("g_userName", 'admin');
+            this.$router.push({path: '/'});
+          }else if(res.data.code==-2){
+            this.$message(res.data.msg);
           }
         })
         .catch((err)=>{
           console.log(err)
         })
-
-        // console.log(this.$refs.loginForm.validate)
-        // this.$refs.loginForm.validate(valid => {
-        //   if (valid) {
-        //     let isSupport = getSupport();
-        //     if(isSupport===undefined||isSupport==null){
-        //       this.dialogVisible =true;
-        //       return;
-        //     }
-        //     this.loading = true;
-        //     // this.$store.dispatch('Login', this.loginForm).then(() => {
-        //     //   this.loading = false;
-        //       this.$router.push({path: '/'})
-        //     // }).catch(() => {
-        //     //   this.loading = false
-        //     // })
-        //   } else {
-        //     console.log('参数验证不合法！');
-        //     return false
-        //   }
-        // })
       },
       dialogConfirm(){
         this.dialogVisible =false;

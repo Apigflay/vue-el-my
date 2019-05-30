@@ -7,8 +7,8 @@
       <el-breadcrumb-item>活动详情</el-breadcrumb-item>
     </el-breadcrumb> -->
     <el-menu class="navbar" mode="horizontal">
-      <hamburger name='' class="hamburger-container" toggleClick="toggleSideBar" isActive="sidebar.opened"></hamburger>
-      <breadcrumb></breadcrumb>
+      <!-- <hamburger name='' class="hamburger-container" toggleClick="toggleSideBar" isActive="sidebar.opened"></hamburger>
+      <breadcrumb></breadcrumb> -->
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img class="user-avatar" src="avatar">
@@ -50,6 +50,7 @@ export default {
     },
     logout() {
       localStorage.removeItem("g_userName")
+      localStorage.removeItem("g_token")
       this.$router.push({path: '/Login'})
       // this.$store.dispatch('LogOut').then(() => {
       //   location.reload() // 为了重新实例化vue-router对象 避免bug

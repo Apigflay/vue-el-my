@@ -3,7 +3,7 @@
         <div class="block" style="padding:30px 0px 30px 50px">
           <span class="demonstration">功能名称</span>
           <el-input v-model="input"
-            placeholder="输入功能节点编号"
+            placeholder="输入功能节点编号（上级编号）"
             size="medium"
             style="width:330px"
           ></el-input>
@@ -12,10 +12,9 @@
         <div class="block2" style="padding:30px 0px 30px 50px">
             <el-button type="primary" icon="el-icon-search">批量删除</el-button>
             <el-button type="primary" icon="el-icon-search">操作员列表</el-button>
-            <el-button type="primary" icon="el-icon-search" @click="goAdd">新增操作员</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="goAdd">新增权限节点</el-button>
             共有数据  {{allCount}}  条
         </div>
-
         <div class="app-container">
              <el-table
               border
@@ -70,8 +69,6 @@
                 </template>
               </el-table-column>
             </el-table>
-          
-          
         </div>
         <!-- 分页 -->
         <div class="block_fenye">
@@ -80,20 +77,20 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage4"
-            :page-sizes="[10, 20, 30, 40]"
+            :page-sizes="[10]"
             :page-size="10"
             layout="total, sizes, prev, pager, next, jumper"
             :total="allCount">
           </el-pagination>
         </div>
     <!-- z遮罩层 -->
-        <div class="marsk" v-if="showNone"></div>
+        <div class="marsk" v-if="showNone_marsk"></div>
     <!-- 弹出框--编辑--新增 -->
-        <div class="pop" v-if="showNone">
-            <el-form model="ruleForm" rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <div class="pop" v-if="showNone_add">
+            <el-form  ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <!--  -->
                 <el-form-item label="功能编号" prop="id">
-                  <el-input v-model="id" placeholder="请输入功能编号" disabled="true"></el-input>
+                  <el-input v-model="id" placeholder="请输入功能编号" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="功能名称" prop="name">
                   <el-input v-model="name" placeholder="请输入功能名称" size="small"></el-input>
@@ -105,16 +102,17 @@
                   <el-input v-model="isDel" placeholder="1停用 0启用"></el-input>
                 </el-form-item>
                 <el-form-item label="叶子节点" prop="isLeaf">
-                  <el-input v-model="isLeaf" placeholder="0-否；1-是" disabled="true"></el-input>
+                  <el-input v-model="isLeaf" placeholder="0-否；1-是" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="菜单/按钮" prop="type">
-                  <el-input v-model="type" placeholder="1-菜单  2-按钮" disabled="true"></el-input>
+                  <el-input v-model="type" placeholder="1-菜单  2-按钮" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="显示顺序" prop="displayOrder">
-                  <el-input v-model="displayOrder" placeholder="默认为1" disabled="true"></el-input>
+                  <el-input v-model="displayOrder" placeholder="默认为1" :disabled="true"></el-input>
                 </el-form-item>
-                
-                
+                <el-form-item label="菜单链接" prop="displayOrder">
+                  <el-input v-model="urlOrClass" placeholder=""></el-input>
+                </el-form-item>
                 <!-- id: 2               功能编号
                 name: "管理员管理"      功能名称
                 parentId: 1             上级编号
@@ -126,36 +124,66 @@
                 create_time: null   创建时间
                 update_time: null       更新时间
                 urlOrClass: "/SysOperator/List"    url -->
-
               <!--  -->
-              
-              
-              
-              
-              
-              
               <el-form-item>
-                <el-button type="primary" @click="goKeep">保存</el-button>
+                <el-button type="primary" @click="goKeepAdd">保存</el-button>
                 <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
                 <el-button @click="reset">关闭弹框</el-button>
               </el-form-item>
             </el-form>
-
         </div>
+    <!-- 弹出框--编辑--新增 -->
+    <!-- 弹出框--编辑-- -->
+        <div class="pop" v-if="showNone_update">
+            <el-form   ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <!--  -->
+                <el-form-item label="功能编号" prop="id">
+                  <el-input v-model="id" placeholder="请输入功能编号" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="功能名称" prop="name">
+                  <el-input v-model="name" placeholder="请输入功能名称" size="small"></el-input>
+                </el-form-item>
+                <el-form-item label="上级编号" prop="parentId">
+                  <el-input v-model="parentId" placeholder="请输入上级编号 只支持数字" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="状态" prop="isDel">
+                  <el-input v-model="isDel" placeholder="1停用 0启用"></el-input>
+                </el-form-item>
+                <el-form-item label="叶子节点" prop="isLeaf">
+                  <el-input v-model="isLeaf" placeholder="0-否；1-是" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="菜单/按钮" prop="type">
+                  <el-input v-model="type" placeholder="1-菜单  2-按钮" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="显示顺序" prop="displayOrder">
+                  <el-input v-model="displayOrder" placeholder="默认为1" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="菜单链接" prop="displayOrder">
+                  <el-input v-model="urlOrClass" placeholder=""></el-input>
+                </el-form-item>
+                <!-- id: 2               功能编号
+                name: "管理员管理"      功能名称
+                parentId: 1             上级编号
+                isDel: "启用"        状态
+                isLeaf: 0             叶子节点 0-否；1-是  
+                type: 1                 菜单/按钮
+                displayOrder: 1     显示顺序
+                
+                create_time: null   创建时间
+                update_time: null       更新时间
+                urlOrClass: "/SysOperator/List"    url -->
+              <!--  -->
+              <el-form-item>
+                <el-button type="primary" @click="goKeepUpdate">保存</el-button>
+                <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+                <el-button @click="reset">关闭弹框</el-button>
+              </el-form-item>
+            </el-form>
+        </div>
+    <!-- 弹出框--编辑-- -->
     </div>
-  
 </template>
 <script>
-  const defaultListQuery = {
-    keyword: null,
-    pageNum: 1,
-    pageSize: 5,
-    publishStatus: null,
-    verifyStatus: null,
-    productSn: null,
-    productCategoryId: null,
-    brandId: null
-  };
   export default {
     name: "productList",
     data() {
@@ -164,95 +192,27 @@
         allCount:null,//权限列表信息zong条数
         input: '',//搜索双向绑定
         row:null,//被点击行的数据
-        showNone:false,//遮罩层的隐藏
-        gridData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-         pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        value1: '',
-        value2: '',
+        showNone_add:false,// 隐藏新增
+        showNone_update:false,//隐藏 修改
+        showNone_marsk:false,//遮罩层的隐藏显示
+        currentPage4:5,//当前页数
+        pageNow:null,//点击的页数
+        // -----
+        id: null ,             // 功能编号
+        name: null,   //   功能名称
+        parentId: null  ,         //  上级编号
+        isDel: null  ,    //  状态 1停用 0正常 
+        isLeaf: null  ,         //  叶子节点 0-否；1-是  
+        type: null  ,            //   菜单/按钮
+        displayOrder: null ,   // 显示顺序
         
-
-         tableData: [{
-          date: '啊啊啊',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        search: '',
-
-      // -----
-      id: null ,             // 功能编号
-      name: null,   //   功能名称
-      parentId: null  ,         //  上级编号
-      isDel: null  ,    //  状态 1停用 0正常 
-      isLeaf: null  ,         //  叶子节点 0-否；1-是  
-      type: null  ,            //   菜单/按钮
-      displayOrder: null ,   // 显示顺序
-      
-      create_time: null , // 创建时间
-      update_time: null , //     更新时间
-      urlOrClass: null,//    url
-      ruleForm: {
-         
-        },
-        // rules: {
-        //   name: [
-        //     { required: true, message: '请输入活动名称', trigger: 'blur' },
-        //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        //   ],
-        //   region: [
-        //     { required: true, message: '请选择活动区域', trigger: 'change' }
-        //   ],
-        //   date1: [
-        //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        //   ],
-        //   date2: [
-        //     { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-        //   ],
-        //   type: [
-        //     { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-        //   ],
-        //   resource: [
-        //     { required: true, message: '请选择活动资源', trigger: 'change' }
-        //   ],
-        //   desc: [
-        //     { required: true, message: '请填写活动形式', trigger: 'blur' }
-        //   ]
-        // }
+        create_time: null , // 创建时间
+        update_time: null , //     更新时间
+        urlOrClass: null,//    url 菜单链接
       }
     },
     created() {
       this.getPrivilegeList();
-      // this.getBrandList();
-      // this.getProductCateList();
     },
     watch: {
       
@@ -272,12 +232,12 @@
           },
         //params参数必写 , 如果没有参数传{}也可以
           data:{
+            // selectPageNum:2,
+            // everyPageNum:10,
           }
         })
         .then((res)=>{
           console.log(res)
-          console.log(res.data.data)
-          console.log(res.data.count[0].allcount)
           if(res.data.code==1){
             this.privilegeList=res.data.data //zong列表信息
             this.allCount=res.data.count[0].allcount //zong条数
@@ -309,8 +269,6 @@
           }
         })
         .then((res)=>{
-          console.log(res.data)
-          // console.log(res.data.count[0].allcount)
           if(res.data.code==1){
             this.privilegeList=res.data.data //查询成功重新赋值列表信息
             this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -368,7 +326,8 @@
       //新增一条
       goAdd:function(){
           let token =localStorage.getItem('g_token');
-          this.showNone=true;
+          this.showNone_marsk=true;
+          this.showNone_add=true;
 
           this.id=null;
           this.name=null;
@@ -377,10 +336,13 @@
           this.isLeaf=null;
           this.type=null;
           this.displayOrder=null;
+          this.urlOrClass=null;
       },
-      //  停用？启用
+      //  停用？启用 1.启用 2.停用
       goStop:function(row){
-         let token =localStorage.getItem('g_token');
+        console.log(row.isDel=="启用")
+        console.log(row.isDel=="停用")
+         let token =localStorage.getItem('g_token');//状态 1停用 0启用
         if(row.isDel=="启用"){
             this.$axios({  
               url: '/api/AdminManager/ChangeMenuState',
@@ -391,7 +353,7 @@
               }, 
               data:{ 
                 type:2,
-                nodeId:row.id
+                id:row.id
               }
             })
             .then((res)=>{
@@ -400,6 +362,7 @@
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
+                location.reload()
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -412,7 +375,7 @@
             .catch((err)=>{
               console.log(err)
             })
-        }else{
+        }else if(row.isDel=="停用"){
             this.$axios({  
               url: '/api/AdminManager/ChangeMenuState',
               method: 'post',
@@ -422,7 +385,7 @@
               },
               data:{ 
                 type:1,
-                nodeId:row.id
+                id:row.id
               }
             })
             .then((res)=>{
@@ -431,6 +394,7 @@
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
+                location.reload()
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -449,7 +413,8 @@
       },
       //编辑
       goEdit:function(row){
-        this.showNone=true;
+        this.showNone_marsk=true;
+        this.showNone_update=true;
         this.row=row;
         console.log(this.row)
 
@@ -460,9 +425,10 @@
         this.isLeaf=row.isLeaf;
         this.type=row.type;
         this.displayOrder=row.displayOrder;    
+        this.urlOrClass=row.urlOrClass;
       },
-      //保存
-      goKeep:function(){
+      //保存-新增  
+      goKeepAdd:function(){
          let token =localStorage.getItem('g_token');
           this.$axios({  
               url: '/api/AdminManager/ChangeMenu',
@@ -482,7 +448,7 @@
                 displayOrder: 1 ,   // 显示顺序
                 create_time: null , // 创建时间
                 update_time: null , //     更新时间
-                urlOrClass: null,//    url
+                urlOrClass: this.urlOrClass,//    url
               }
             })
             .then((res)=>{
@@ -491,7 +457,51 @@
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-                // location.reload()
+                location.reload()
+              }else if(res.data.code==-4){
+              this.$message('登录信息过期，请重新登录');
+                localStorage.removeItem('g_userName');
+                localStorage.removeItem('g_token');
+                this.$router.push({path: '/login'});
+              }else{
+                    this.$message(res.data.success[0].msg);
+              }
+            })
+            .catch((err)=>{
+              console.log(err)
+            })
+      },
+       //保存-修改
+      goKeepUpdate:function(){
+         let token =localStorage.getItem('g_token');
+          this.$axios({  
+              url: '/api/AdminManager/ChangeMenu',
+              method: 'post',
+              //params参数必写 , 如果没有参数传{}也可以 
+              headers:{
+                  Authorization:'Bearer '+token,
+              },
+              data:{   
+                id:this.id,             // 功能编号
+                name: this.name,   //   功能名称
+                parentId: Number(this.parentId),         //  上级编号
+                isDel: Number(this.isDel)  ,    //  状态 1停用 0正常    1启用  2   停用
+
+                isLeaf: null ,         //  叶子节点 0-否；1-是  
+                type: null  ,            //   菜单/按钮
+                displayOrder: 1 ,   // 显示顺序
+                create_time: null , // 创建时间
+                update_time: null , //     更新时间
+                urlOrClass: this.urlOrClass,//    url
+              }
+            })
+            .then((res)=>{
+              console.log(res.data)
+              // console.log(res.data.count[0].allcount)
+              if(res.data.code==1){
+                // this.privilegeList=res.data.data //查询成功重新赋值列表信息
+                // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
+                location.reload()
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -507,19 +517,16 @@
       },
       //关闭编辑弹框
       reset:function(){
-        this.showNone=false;
+        this.showNone_add=false;
+        this.showNone_update=false;
+        this.showNone_marsk=false;
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        console.log(val);
       },
-
-
-      
-        
-      
     }
   }
 </script>
@@ -546,7 +553,7 @@
   top: 0;
   left: 0; 
   width: 100%;
-  height: 100%;
+  height: 150%;
   background: #000;
   opacity: 0.5;
   z-index: 9999;

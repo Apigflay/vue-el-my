@@ -10,25 +10,22 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <el-submenu index="1">
+
+        <el-submenu index="1" v-for="(item,index) in routerFarther" :key="index">
             <template slot="title">
             <i class="el-icon-location"></i>
-            <span slot="title">管理员管理</span>
+            <span slot="title">{{item.name}}</span>
             </template>
             <el-menu-item-group>
-            <!-- <span slot="title">分组一</span> -->
-            <router-link to="/privilege">
-                <el-menu-item index="1-1">操作员管理</el-menu-item>
+            <router-link :to="item.urlOrClass" v-for="(item,index) in routerSon" :key="index">
+                <el-menu-item :index="index">{{item.name}}</el-menu-item>
             </router-link>
-            <router-link to="/privilege">
+            <!-- <router-link to="/privilege">
                 <el-menu-item index="1-2">权限管理</el-menu-item>
-            </router-link>
-            <router-link to="/role">
+            </router-link>-->
+            <!-- <router-link to="/role">
                 <el-menu-item index="1-3">角色管理</el-menu-item>
-            </router-link>
-            
-            
-            
+            </router-link> -->
             </el-menu-item-group>
         </el-submenu>
         <el-menu-item index="2">
@@ -74,11 +71,13 @@
     name: "productList",
     data() {
       return {
-        isCollapse: false
+        isCollapse: false,
+        routerFarther:[],//父类路由
+        routerSon:[],//子类路由
       }
     },
     created() {
-     
+        this.getRouter()
     },
     watch: {
       
@@ -87,11 +86,23 @@
      
     },
     methods: {
+      getRouter:function(){
+          let arr = JSON.parse(localStorage.getItem("g_router"));//路由数组
+          let length = arr.length;
+          for(let i = 0;i<length;i++){
+              if(arr[i].parentId==0){
+                  this.routerFarther.push(arr[i]);
+              }else if(arr[i].parentId==1){
+                  this.routerSon.push(arr[i]);
+              }
+          }
+      },
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
+        
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       },
       show_none:function(){
           if(this.isCollapse){

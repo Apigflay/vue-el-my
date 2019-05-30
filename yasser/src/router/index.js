@@ -15,7 +15,8 @@ import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
 import Dask from '@/components/Dask'
 import Privilege from '@/components/Privilege' //权限管理
-import Role from '@/components/Role' //权限管理
+import Role from '@/components/Role' //权限管理operators
+import Operators from '@/components/Operators' //权限管理operators
 Vue.use(Router)
 
 // import VueCookies from 'vue-cookies'
@@ -60,11 +61,11 @@ const router= new Router({
       }
     },
     {
-      path: '/privilege',//操作员管理
-      name: 'Privilege',
+      path: '/operators',//操作员管理
+      name: 'Operators',
       components: {
         nav:Nav,
-        main:Privilege,
+        main:Operators,
         sidebar:Sidebar
       }
     },
@@ -151,16 +152,16 @@ const router= new Router({
 // 全局路由守卫
 
 router.beforeEach((to, from, next) => {
-  console.log('navigation-guards');
+  // console.log('navigation-guards');
   // to: Route: 即将要进入的目标 路由对象
   // from: Route: 当前导航正要离开的路由
   // next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
  
-  const nextRoute = ['Index', 'Count', 'HelloWorld','Privilege','Role'];
+  const nextRoute = ['Index', 'Count', 'HelloWorld','Privilege','Role','Operators'];
   // console.log(document.cookie())
   // let isLogin = false
   let isLogin=localStorage.getItem("g_userName");// 是否登录
-  console.log(isLogin);
+  // console.log(isLogin);
   // 未登录状态；当路由到nextRoute指定页时，跳转至login
   if (nextRoute.indexOf(to.name) >= 0) { 
     if (isLogin==null) {
