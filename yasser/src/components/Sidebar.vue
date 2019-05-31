@@ -28,26 +28,35 @@
             </router-link> -->
             </el-menu-item-group>
         </el-submenu>
+
+        <router-link to="/salemanage">
         <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">公司管理</span>
+            <template slot="title">
+                <i class="el-icon-setting"></i>
+                <span slot="title">业务员管理</span>  
+            </template>
         </el-menu-item>
-        <el-menu-item index="3" disabled>
-            <i class="el-icon-document"></i>
-            <span slot="title">会员管理</span>
+        </router-link>
+        <router-link to="/retailproduct">
+        <el-menu-item index="3">
+            <i class="el-icon-setting"></i>
+            <span slot="title">零售产品明细</span>
         </el-menu-item>
+        </router-link>
+        <router-link to="/retailpay">
         <el-menu-item index="4">
             <i class="el-icon-setting"></i>
-            <span slot="title">客服管理</span>
+            <span slot="title">零售产品支出</span>
         </el-menu-item>
-        <el-menu-item index="5">
+        </router-link>
+        <!-- <el-menu-item index="5">
             <i class="el-icon-setting"></i>
             <span slot="title">接口管理</span>
         </el-menu-item>
         <el-menu-item index="6">
             <i class="el-icon-setting"></i>
             <span slot="title">系统管理</span>
-        </el-menu-item>
+        </el-menu-item> -->
         </el-menu>
           
         

@@ -237,7 +237,6 @@
           }
         })
         .then((res)=>{
-          console.log(res)
           if(res.data.code==1){
             this.privilegeList=res.data.data //zong列表信息
             this.allCount=res.data.count[0].allcount //zong条数
@@ -304,8 +303,6 @@
           }
         })
         .then((res)=>{
-          console.log(res.data)
-          // console.log(res.data.count[0].allcount)
           if(res.data.code==1){
             // this.privilegeList=res.data.data //查询成功重新赋值列表信息
             // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -340,8 +337,8 @@
       },
       //  停用？启用 1.启用 2.停用
       goStop:function(row){
-        console.log(row.isDel=="启用")
-        console.log(row.isDel=="停用")
+        // console.log(row.isDel=="启用")
+        // console.log(row.isDel=="停用")
          let token =localStorage.getItem('g_token');//状态 1停用 0启用
         if(row.isDel=="启用"){
             this.$axios({  
@@ -357,8 +354,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -389,8 +384,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -408,8 +401,6 @@
               console.log(err)
             })
         }
-        console.log(row);
-        
       },
       //编辑
       goEdit:function(row){
@@ -452,8 +443,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -496,8 +485,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -522,10 +509,10 @@
         this.showNone_marsk=false;
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        // console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(val);
+        // console.log(val);
       },
     }
   }

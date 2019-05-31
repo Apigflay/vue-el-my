@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!-- <transition-group name="fade"> -->
     <router-view/>
     <!-- <router-view name="Login" style=""></router-view> -->
     <router-view name="nav" style=""></router-view>
@@ -22,8 +20,6 @@
       <router-link to="/count">计数</router-link> |
     </p> -->
     <!-- <b>{{ $route.name}}</b> -->
-    <!-- <button @click="goback">后退</button>
-    <button @click="gohome">gohome</button> -->
   </div>
 </template>
 

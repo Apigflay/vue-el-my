@@ -52,9 +52,6 @@ export default {
       localStorage.removeItem("g_userName")
       localStorage.removeItem("g_token")
       this.$router.push({path: '/Login'})
-      // this.$store.dispatch('LogOut').then(() => {
-      //   location.reload() // 为了重新实例化vue-router对象 避免bug
-      // })
     }
   }
 }

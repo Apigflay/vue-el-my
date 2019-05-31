@@ -111,7 +111,7 @@
                   <el-input v-model="account" placeholder="请输入角色编号" ></el-input>
                 </el-form-item>
                 <el-form-item label="角色名称" prop="id" style="text-align:left">
-                  <el-select v-model="select_value" placeholder="请选择" @change=gor()>
+                  <el-select v-model="select_value" placeholder="请选择">
                     <el-option
                       v-for="(item,index) in editList"
                       :key="index"
@@ -228,51 +228,6 @@
         newPassword2:null,//确认修改密码值
         select_value:null,//下拉框选中的值
         RoleId:null,//选中xia拉框的值  角色名称
-
-        t:true,
-        gridData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-         pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        
-        value2: '',
-        
-
-         tableData: [{
-          date: '啊啊啊',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        search: '',
-
       // -----
       textarea:null,//多选框的内容
       aaa:[],
@@ -281,41 +236,10 @@
       role_name: null , //     角色名称
       isDel: null  ,    //  状态 1停用 0正常 
       create_time: null , // 创建时间select_value
-      
-    
-      ruleForm: {
-         
-        },
-        // rules: {
-        //   name: [
-        //     { required: true, message: '请输入活动名称', trigger: 'blur' },
-        //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        //   ],
-        //   region: [
-        //     { required: true, message: '请选择活动区域', trigger: 'change' }
-        //   ],
-        //   date1: [
-        //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        //   ],
-        //   date2: [
-        //     { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-        //   ],
-        //   type: [
-        //     { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-        //   ],
-        //   resource: [
-        //     { required: true, message: '请选择活动资源', trigger: 'change' }
-        //   ],
-        //   desc: [
-        //     { required: true, message: '请填写活动形式', trigger: 'blur' }
-        //   ]
-        // }
       }
     },
     created() {
       this.getRoleList();
-      // this.getBrandList();
-      // this.getProductCateList();
     },
     watch: {
       
@@ -324,9 +248,9 @@
       
     },
     methods: {
-      gor:function(){
-          console.log(this.select_value)
-      },
+      // gor:function(){
+      //     console.log(this.select_value)
+      // },
       //获取权限列表信息--ok
       getRoleList:function(){
         let token =localStorage.getItem('g_token');
@@ -341,7 +265,7 @@
           }
         })
         .then((res)=>{
-          console.log(res)
+          // console.log(res)
           if(res.data.code==1){
             this.privilegeList=res.data.data; //zong列表信息
             this.allCount=res.data.count[0].allcount; //zong条数
@@ -361,7 +285,7 @@
       //搜索id---ok
       goSearchId:function(){
         let token =localStorage.getItem('g_token');
-        console.log(this.value1)
+        // console.log(this.value1)
         if(this.value1==false){
             this.$message("日期不能为空");
         }else{
@@ -376,7 +300,7 @@
                 }
                 })
                 .then((res)=>{
-                console.log(res.data)
+                // console.log(res.data)
                 // console.log(res.data.count[0].allcount)
                 if(res.data.code==1){
                     this.$message(res.data.msg);
@@ -403,7 +327,7 @@
       //删除一条--ok
       goDelete:function(row){
         let token =localStorage.getItem('g_token');
-        console.log(row);
+        // console.log(row);
         // console.log(this.row)
         // console.log(222)
         this.$axios({  
@@ -419,7 +343,7 @@
           }
         })
         .then((res)=>{
-          console.log(res.data)
+          // console.log(res.data)
           // console.log(res.data.count[0].allcount)
           if(res.data.code==1){
             // this.privilegeList=res.data.data //查询成功重新赋值列表信息
@@ -456,8 +380,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -489,8 +411,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -509,8 +429,6 @@
                 console.log(err)
             })
         }
-        console.log(row);
-        
       },
       //新增
       goAdd:function(){
@@ -536,8 +454,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 this.editList=res.data.data;//查询成功 赋值编辑列表信息
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
@@ -579,8 +495,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 this.editList=res.data.data;//查询成功 赋值编辑列表信息
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
@@ -650,8 +564,6 @@
                   }
                 })
                 .then((res)=>{
-                  console.log(res.data)
-                  // console.log(res.data.count[0].allcount)
                   if(res.data.code==1){
                     // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                     // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -740,8 +652,6 @@
               }
             })
             .then((res)=>{
-              console.log(res.data)
-              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -768,10 +678,10 @@
         this.showNoneGai=false;
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        // console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(val);
+        // console.log(val);
         let token =localStorage.getItem('g_token');
         this.$axios({  
           url: '/api/AdminManager/AdminList?selectPageNum='+val+'&everyPageNum=10',
