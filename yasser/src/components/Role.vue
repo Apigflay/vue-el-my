@@ -154,16 +154,6 @@
   
 </template>
 <script>
-  const defaultListQuery = {
-    keyword: null,
-    pageNum: 1,
-    pageSize: 5,
-    publishStatus: null,
-    verifyStatus: null,
-    productSn: null,
-    productCategoryId: null,
-    brandId: null
-  };
   export default {
     name: "productList",
     data() {
@@ -176,7 +166,7 @@
         showNoneUpdate:false,//弹出层编辑的隐藏
         showNoneAdd:false,//弹出层新增的隐藏
         value1: '',//搜索日期
-        currentPage4:4,//当前条数
+        currentPage4:1,//当前条数
         editList:null,//编辑新增查询数组
         editListqq:[],//----选中的数组name
         editNewList:[],//选中的数组id
@@ -203,7 +193,7 @@
       getRoleList:function(){
         let token =localStorage.getItem('g_token');
         this.$axios({  
-          url: '/api/AdminManager/RoleList?selectPageNum=2&everyPageNum=10',//&
+          url: '/api/AdminManager/RoleList?selectPageNum=1&everyPageNum=10',//&
           method: 'get',
           //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -550,8 +540,38 @@
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
       },
+      //分页功能 点击
       handleCurrentChange(val) {
-        // console.log(`当前页: ${val}`);
+        // console.log(val);
+        let token =localStorage.getItem('g_token');
+        this.$axios({  
+          url: '/api/AdminManager/RoleList?selectPageNum='+val+'&everyPageNum=10',//&
+          method: 'get',
+          //params参数必写 , 如果没有参数传{}也可以
+          headers:{
+                Authorization:'Bearer '+token
+          },
+          data:{  
+          }
+        })
+        .then((res)=>{
+          // console.log(res)
+          if(res.data.code==1){
+            this.privilegeList=res.data.data; //zong列表信息
+            this.allCount=res.data.count[0].allcount; //zong条数
+          }else if(res.data.code==-4){
+              this.$message('登录信息过期，请重新登录');
+                localStorage.removeItem('g_userName');
+                localStorage.removeItem('g_token');
+                this.$router.push({path: '/login'});
+          }else{
+            this.$message(res.msg);
+          }
+        })
+        .catch((err)=>{
+           console.log(err)
+        })
+        
       },
 
 
@@ -583,7 +603,7 @@
   top: 0;
   left: 0; 
   width: 100%;
-  height: 100%;
+  height: 150%;
   background: #000;
   opacity: 0.5;
   z-index: 9999;

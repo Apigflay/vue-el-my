@@ -92,7 +92,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage4"
-            :page-sizes="[10, 20, 30, 40]"
+            :page-sizes="[10]"
             :page-size="10"
             layout="total, sizes, prev, pager, next, jumper"
             :total="allCount">
@@ -206,16 +206,6 @@
 </template>
 <script>
   import md5 from 'js-md5';
-  const defaultListQuery = {
-    keyword: null,
-    pageNum: 1,
-    pageSize: 5,
-    publishStatus: null,
-    verifyStatus: null,
-    productSn: null,
-    productCategoryId: null,
-    brandId: null
-  };
   export default {
     name: "productList",
     data() {
@@ -229,7 +219,7 @@
         showNoneAdd:false,//弹出层新增的隐藏
         showNoneGai:false,//弹出层改密的隐藏
         value1: '',//搜索日期
-        currentPage4:4,//当前条数
+        currentPage4:1,//当前条数
         editList:null,//编辑新增查询数组
         editListqq:[],//----选中的数组name
         editNewList:[],//选中的数组id
@@ -341,7 +331,7 @@
       getRoleList:function(){
         let token =localStorage.getItem('g_token');
         this.$axios({  
-          url: '/api/AdminManager/AdminList?selectPageNum=2&everyPageNum=10',
+          url: '/api/AdminManager/AdminList?selectPageNum=1&everyPageNum=10',
           method: 'get',
           //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -781,7 +771,35 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        console.log(val);
+        let token =localStorage.getItem('g_token');
+        this.$axios({  
+          url: '/api/AdminManager/AdminList?selectPageNum='+val+'&everyPageNum=10',
+          method: 'get',
+          //params参数必写 , 如果没有参数传{}也可以
+          headers:{
+                Authorization:'Bearer '+token
+          },
+          data:{  
+          }
+        })
+        .then((res)=>{
+          console.log(res)
+          if(res.data.code==1){
+            this.privilegeList=res.data.data; //zong列表信息
+            this.allCount=res.data.count[0].allcount; //zong条数
+          }else if(res.data.code==-4){
+              this.$message('登录信息过期，请重新登录');
+                localStorage.removeItem('g_userName');
+                localStorage.removeItem('g_token');
+                this.$router.push({path: '/login'});
+          }else{
+            this.$message(res.msg);
+          }
+        })
+        .catch((err)=>{
+           console.log(err)
+        })
       },
 
 
@@ -813,7 +831,7 @@
   top: 0;
   left: 0; 
   width: 100%;
-  height: 100%;
+  height: 200%;
   background: #000;
   opacity: 0.5;
   z-index: 2999;
