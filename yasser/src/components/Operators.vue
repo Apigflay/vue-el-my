@@ -18,10 +18,10 @@
           <el-button type="primary" icon="el-icon-search" @click="goSearchId">搜索</el-button>
         </div>
         <div class="block2" style="padding:30px 0px 30px 50px">
-            <el-button type="primary" icon="el-icon-search">批量删除</el-button>
-            <el-button type="primary" icon="el-icon-search">操作员列表</el-button>
-            <el-button type="primary" icon="el-icon-search" @click="goAdd">新增操作员</el-button>
-            共有数据  {{allCount}}  条
+            <el-button type="primary" icon="">批量删除</el-button>
+            <el-button type="primary" icon="">操作员列表</el-button>
+            <el-button type="primary" icon="" @click="goAdd">新增操作员</el-button>
+            <!-- 共有数据  {{allCount}}  条 -->
         </div>
 
         <div class="app-container">
@@ -568,7 +568,7 @@
                     // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                     // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
                     this.$message(res.data.msg);
-                    location.reload();
+                    // location.reload();
                   }else if(res.data.code==-4){
                   this.$message('登录信息过期，请重新登录');
                     localStorage.removeItem('g_userName');
@@ -632,10 +632,10 @@
       },
       //保存--编辑
       goKeepUpdate:function(){
-          console.log(this.select_value)
+          // console.log(this.select_value)
           // console.log(this.editList)
           let token =localStorage.getItem('g_token');
-          console.log(this.isDel)
+          // console.log(this.isDel)
           this.$axios({  
               url: '/api/AdminManager/ChangeAdmin',
               method: 'post',
@@ -662,6 +662,9 @@
                 localStorage.removeItem('g_userName');
                 localStorage.removeItem('g_token');
                 this.$router.push({path: '/login'});
+              }else if(res.data.code==-2){
+                this.$message(res.data.msg);
+               
               }else{
                 this.$message(res.data.success[0].msg);
               }
@@ -719,7 +722,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
 
 
 /* .block2{
@@ -737,18 +740,18 @@
     position: relative;
 }
 .marsk{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0; 
   width: 100%;
-  height: 200%;
+  height: 100%;
   background: #000;
   opacity: 0.5;
   z-index: 2999;
 }
 .pop{
   padding:2% 4%;
-  position: absolute;
+  position: fixed;
   top: 9%;
   left: 18%; 
   width: 60%;

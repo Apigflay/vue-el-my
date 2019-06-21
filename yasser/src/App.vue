@@ -5,7 +5,8 @@
     <router-view name="nav" style=""></router-view>
     <div class="body_main"> 
       <router-view name="sidebar" style=""></router-view>
-      <router-view name="main" style=""></router-view>
+      <router-view name="main" style="">
+      </router-view>
     </div>
     
     <!-- </transition-group> -->
@@ -19,7 +20,7 @@
       <router-link to="/bbbbbb">我是瞎写的</router-link> |
       <router-link to="/count">计数</router-link> |
     </p> -->
-    <!-- <b>{{ $route.name}}</b> -->
+    <!-- <b>{{ $route.meta.a}}</b> -->
   </div>
 </template>
 
@@ -52,6 +53,8 @@ export default {
 html,body{
   width:100%;
   height: 100%;
+  overflow:auto;   /* 用于 android4+，或其他设备 */
+  -webkit-overflow-scrolling:touch;    /* 用于 ios5+ */ 
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -61,7 +64,10 @@ html,body{
   color: #2c3e50;
   width:100%;
   height: 100%;
+  display: flex;
+  flex-direction:column;
 }
+a{text-decoration:none}
 .fade-enter {
   opacity:0;
 }
@@ -76,30 +82,39 @@ html,body{
   transition:opacity .5s;
 }
 .nav{
-  /* border-bottom:1px solid saddlebrown; */
-  height: 8%;
-  /* position: absolute; */
-  /* top: 0; */
-  /* left: 0; */
-  /* z-index: 999; */
-
+  height: 51px;
+  width:100%;
 }
 .body_main{
-  width:100%;
-  height: 90%;
+  flex: 1;
   display: flex;
 }
 .side{
-  border-right: solid 1px #e6e6e6;
-  box-sizing:border-box;
   height: 100%;
+  overflow-y: scroll;
   background: #545c64;
 }
 .main{
   overflow:scroll;
-  min-width: 840px;
-  width:80%;
+  /* min-width: 840px; */
+  /* width:80%; */
   flex: 1;
-  /* padding-bottom: 50px; */
+  /* padding-bottom: 30px; */
+}
+/*解决合计在滚动条下 */
+.el-table{
+    overflow: auto;
+}
+ .el-table__header-wrapper, 
+ .el-table__body-wrapper, 
+ .el-table__footer-wrapper{
+          overflow:visible;     
+    }
+  .el-table__body-wrapper{
+    overflow-x:visible !important;
+  }
+  /* 这个是为了解决前面样式覆盖之后伪类带出来的竖线 */
+ .el-table::after{
+    position: relative;
 }
 </style>

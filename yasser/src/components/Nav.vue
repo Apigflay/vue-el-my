@@ -11,7 +11,7 @@
       <breadcrumb></breadcrumb> -->
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" src="avatar">
+          <img class="user-avatar" src="./imgs/avator.png">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -30,27 +30,23 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
-// import Breadcrumb from '@/components/Breadcrumb'
-// import Hamburger from '@/components/Hamburger'
 export default {
-//   components: {
-//     Breadcrumb,
-//     Hamburger
-//   },
+  data() {
+    return {
+      imgUrl:'./imgs/avatar.png'//默认头像
+    }
+  },
   computed: {
-    // ...mapGetters([
-    //   'sidebar',
-    //   'avatar'
-    // ])
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      localStorage.removeItem("g_userName")
-      localStorage.removeItem("g_token")
+      localStorage.removeItem("g_userName");
+      localStorage.removeItem("g_token");
+      localStorage.removeItem("g_router");
+      localStorage.removeItem("g_id");
       this.$router.push({path: '/Login'})
     }
   }

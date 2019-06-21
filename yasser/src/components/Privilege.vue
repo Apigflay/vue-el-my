@@ -10,10 +10,10 @@
           <el-button type="primary" icon="el-icon-search" @click="goSearchId">搜索</el-button>
         </div>
         <div class="block2" style="padding:30px 0px 30px 50px">
-            <el-button type="primary" icon="el-icon-search">批量删除</el-button>
-            <el-button type="primary" icon="el-icon-search">操作员列表</el-button>
-            <el-button type="primary" icon="el-icon-search" @click="goAdd">新增权限节点</el-button>
-            共有数据  {{allCount}}  条
+            <el-button type="primary" icon="">批量删除</el-button>
+            <el-button type="primary" icon="">操作员列表</el-button>
+            <el-button type="primary" icon="" @click="goAdd">新增权限节点</el-button>
+            <!-- 共有数据  {{allCount}}  条 -->
         </div>
         <div class="app-container">
              <el-table
@@ -517,7 +517,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
 
 
 /* .block2{
@@ -536,18 +536,18 @@
     /* overflow: scroll; */
 }
 .marsk{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0; 
   width: 100%;
-  height: 150%;
+  height: 100%;
   background: #000;
   opacity: 0.5;
   z-index: 9999;
 }
 .pop{
   padding:2% 4%;
-  position: absolute;
+  position: fixed;
   top: 9%;
   left: 18%; 
   width: 60%;

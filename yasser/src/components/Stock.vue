@@ -10,7 +10,7 @@
                 start-placeholder="开始日期"
                 end-placeholder="结束日期">
             </el-date-picker>
-            <!-- <span class="demonstration">产品</span>
+            <span class="demonstration">产品</span>
             <el-select v-model="product" placeholder="请选择">
                 <el-option
                 v-for="(item,index) in allProductList"
@@ -18,13 +18,13 @@
                 :label="item.name"
                 :value="item.id">
                 </el-option>
-            </el-select> -->
-             <span class="demonstration">活动</span>
+            </el-select>
+             <span class="demonstration">发货地</span>
             <el-select v-model="adress" placeholder="请选择" >
                 <el-option
                 v-for="(item,index) in allAdressList"
                 :key="index"
-                :label="item.activity_name"
+                :label="item.name"
                 :value="item.id">
                 </el-option>
             </el-select>
@@ -33,7 +33,7 @@
         </div>
         <div class="block2" style="padding:30px 0px 30px 50px">
             <el-button type="primary" icon="" @click="exportExcel">导出Excel</el-button>
-            <el-button type="primary" icon="" @click="goAdd">添加支出数据</el-button>
+            <el-button type="primary" icon="" @click="goAdd">添加数据</el-button>
             <!-- 共有数据  {{allCount}}  条 -->
         </div>
 
@@ -48,33 +48,69 @@
               <el-table-column
                 type="selection">
               </el-table-column>
+
               <!-- 日期 -->
               <el-table-column
                 label="日期"
-                width="250"
+                width=""
                 sortable
                 prop="create_time">
               </el-table-column>
-              <!-- 费用名目 -->
+              <!-- 产品名称 -->
               <el-table-column
-                label="费用名目"
+                label="产品名称"
                 width=""
                 sortable
-                prop="cost_name">
+                prop="product_name">
               </el-table-column>
-              <!-- 金额 -->
+              <!-- 每箱数量 -->
               <el-table-column
-                label="金额（元）"
+                label="每箱数量"
                 width=""
                 sortable
-                prop="cost_money">
+                prop="case_num">
               </el-table-column>
-              <!-- 活动名称 -->
+              <!-- 箱数 -->
               <el-table-column
-                label="活动名称"
+                label="箱数"
                 width=""
                 sortable
-                prop="activityName">
+                prop="format">
+              </el-table-column>
+              <!-- 进价 -->
+              <el-table-column
+                label="进价"
+                width=""
+                sortable
+                prop="base_price">
+              </el-table-column>
+              <!-- 总计 -->
+              <el-table-column
+                label="总计"
+                width=""
+                sortable
+                prop="total_money">
+              </el-table-column>
+              <!-- 发货地 -->
+              <el-table-column
+                label="发货地"
+                width=""
+                sortable
+                prop="from_where">
+              </el-table-column>
+              <!-- 已还款 -->
+              <el-table-column
+                label="已还款"
+                width=""
+                sortable
+                prop="pay_money">
+              </el-table-column>
+              <!-- 未还款 -->
+              <el-table-column
+                label="未还款"
+                width=""
+                sortable
+                prop="nopay_money">
               </el-table-column>
               <!-- 操作 -->
               <el-table-column
@@ -94,21 +130,40 @@
         <div class="pop" v-if="showNoneUpdate">
             <el-form   ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <!--  -->
-               <el-form-item label="活动名称" prop="id" style="text-align:left">
-                  <el-select v-model="activity_id" placeholder="请选择">
+                <el-form-item label="产品名称" prop="id" style="text-align:left">
+                  <el-select v-model="product_id" placeholder="">
                     <el-option
-                      v-for="(item,index) in editNewList"
+                      v-for="(item,index) in editList"
                       :key="index"
-                      :label="item.activity_name"
+                      :label="item.name"
                       :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="费用名目" prop="id">
-                  <el-input v-model="cost_name" placeholder="请输入费用名目" ></el-input>
+                <el-form-item label="每箱数量" prop="id">
+                  <el-input v-model="case_num" placeholder="请输入每箱数量" ></el-input>
                 </el-form-item>
-                <el-form-item label="单价" prop="id">
-                  <el-input v-model="cost_money" placeholder="请输入单价" ></el-input>
+                <el-form-item label="箱数" prop="id">
+                  <el-input v-model="format" placeholder="请输入箱数"></el-input>
+                </el-form-item>
+                <el-form-item label="进价" prop="id">
+                  <el-input v-model="base_price" placeholder="请输入进价" ></el-input>
+                </el-form-item>
+                <el-form-item label="发货地" prop="id">
+                  <el-input v-model="from_where" placeholder="请输入发货地" ></el-input>
+                </el-form-item>
+                <el-form-item label="已还款" prop="id" style="text-align:left">
+                  <el-select v-model="flag_pay" placeholder="请选择">
+                    <el-option
+                      v-for="(item,index) in flag_data"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="未还款" prop="id">
+                  <el-input v-model="nopay_money" placeholder="请输入未还款金恩" ></el-input>
                 </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="goKeepUpdate">编辑</el-button>
@@ -122,24 +177,45 @@
         <div class="pop" v-if="showNoneAdd">
             <el-form   ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <!--  -->
-                <el-form-item label="活动名称" prop="id" style="text-align:left">
-                  <el-select v-model="activity_id" placeholder="请选择">
+               
+                <el-form-item label="产品名称" prop="id" style="text-align:left">
+                  <el-select v-model="product_id" placeholder="请选择">
                     <el-option
-                      v-for="(item,index) in editNewList"
+                      v-for="(item,index) in editList"
                       :key="index"
-                      :label="item.activity_name"
+                      :label="item.name"
                       :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="费用名目" prop="id">
-                  <el-input v-model="cost_name" placeholder="请输入费用名目" ></el-input>
+                <el-form-item label="每箱数量" prop="id">
+                  <el-input v-model="case_num" placeholder="请输入每箱数量" ></el-input>
                 </el-form-item>
-                <el-form-item label="单价" prop="id">
-                  <el-input v-model="cost_money" placeholder="请输入单价" ></el-input>
+                <el-form-item label="箱数" prop="id">
+                  <el-input v-model="format" placeholder="请输入箱数"></el-input>
+                </el-form-item>
+                <el-form-item label="进价" prop="id">
+                  <el-input v-model="base_price" placeholder="请输入进价" ></el-input>
+                </el-form-item>
+                <el-form-item label="发货地" prop="id">
+                  <el-input v-model="from_where" placeholder="请输入发货地" ></el-input>
+                </el-form-item>
+                <el-form-item label="已还款" prop="id" style="text-align:left">
+                  <el-select v-model="flag_pay" placeholder="请选择">
+                    <el-option
+                      v-for="(item,index) in flag_data"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="未还款" prop="id">
+                  <el-input v-model="nopay_money" placeholder="请输入未还款金恩" ></el-input>
                 </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="goKeepAdd">添加</el-button>
+                <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
                 <el-button @click="reset">取消</el-button>
               </el-form-item>
             </el-form>
@@ -156,14 +232,13 @@
     name: "productList",
     data() {
       return {
+        flag_data:[{name:'未还款',id:0},{name:'部分还款',id:1},{name:'已结清',id:2}],
         allProductList:null,//搜索-所有产品列表
         product:null,//搜索选中产品deid
-
         value1: '',//搜索日期
         allAdressList:null,//搜索-所有地址列表
         adress:null,//搜索选中地址id
         editList:null,//编辑新增查询数组 产品列表
-        editNewList:null,//活动列表
         privilegeList:null,//权限列表信息
         row:null,//被点击行的数据
         showNone:false,//遮罩层的隐藏
@@ -172,12 +247,14 @@
 
         allCount:0,//权限列表信息zong条数
         input: '',//搜索双向绑定
+        
+        
         showNoneGai:false,//弹出层改密的隐藏
         
         currentPage4:1,//当前条数
         
         editListqq:[],//----选中的数组name
-        
+        editNewList:[],//选中的数组id
         editNewListStr:'',//最终处理string
         newPassword1:null,//修改密码值
         newPassword2:null,//确认修改密码值
@@ -188,11 +265,18 @@
       aaa:[],
 
       id:null,//编号
-      cost_name:null,//费用名目
-      cost_money:null,//金额
-      activity_id:null,//活动id
-      activityName:null,//活动活动名称
+      product_id:null,//产品id
+      product_name:null,//产品名称
+      case_num:null,//每箱数量
+      format:null,//箱数
+      base_price:null,//进价
+      total_money:null,//总计
+      from_where:null,//发货地
+      flag_pay:null,//已还款 0已还款 1部分还款 2未还款 
+      pay_money:null,//已还款
+      nopay_money:null,//未还款
       create_time:null,//创建时间
+      update_time:null,//更新时间
       data_state:null,//状态
       }
     },
@@ -226,8 +310,18 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
+          }else if(index === 3){
+            sums[index] = '---';
+            return;
           }
-         
+          else if(index === 4){
+            sums[index] = '---';
+            return;
+          }
+          else if(index === 5){
+            sums[index] = '---';
+            return;
+          }
           const values = data.map(item => Number(item[column.property]));
           if (!values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
@@ -243,6 +337,7 @@
             sums[index] = '---';
           }
         });
+
         return sums;
       },
       // gor:function(){
@@ -280,11 +375,11 @@
            console.log(err)
         })
       },
-      //获取所有活动地
+      //获取所有发货地
       getOptionAdressMsg:function(){
          let token =localStorage.getItem('g_token'); 
          this.$axios({  
-          url: '/api/ProductManager/ActivityAllList',
+          url: '/api/ProductManager/BuyGoodsAddressAllList',//?selectPageNum=1&everyPageNum=10
           method: 'get',
           //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -316,7 +411,7 @@
       getRoleList:function(){
         let token =localStorage.getItem('g_token');
         this.$axios({  
-          url: '/api/ProductManager/OtherCostList',//?selectPageNum=1&everyPageNum=10
+          url: '/api/ProductManager/BuyGoodsDList',//?selectPageNum=1&everyPageNum=10
           method: 'get',
           //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -350,16 +445,15 @@
         if(this.value1==false){
             this.$message("日期不能为空");
         }else{
-            this.$axios({
-                url: '/api/ProductManager/OtherCostList?startTime='+this.value1[0]+'&endTime='+this.value1[1]+'&activityId='+Number(this.adress),
+            this.$axios({  ////api/ProductManager/BuyGoodsDList?productId=0&address=''&name=&startTime=2019-05-15&endTime=2019-05-16
+                url: '/api/ProductManager/BuyGoodsDList?startTime='+this.value1[0]+'&endTime='+this.value1[1]+'&productId='+Number(this.product),
                 method: 'get',
                 //params参数必写 , 如果没有参数传{}也可以
                 headers:{
                     Authorization:'Bearer '+token
                 },
                 data:{  
-                  // productId:Number(this.product),//产品
-                  // activityId:Number(this.adress),//活动
+                  address:this.adress
                 }
                 })
                 .then((res)=>{
@@ -390,8 +484,11 @@
       //删除一条--ok
       goDelete:function(row){
         let token =localStorage.getItem('g_token');
+        // console.log(row);
+        // console.log(this.row)
+        // console.log(222)
         this.$axios({  
-          url: '/api/ProductManager/ChangeOtherCostState',
+          url: '/api/ProductManager/ChangeBuyGoodsDState',
           method: 'post',
         //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -404,6 +501,7 @@
         })
         .then((res)=>{
           // console.log(res.data)
+          // console.log(res.data.count[0].allcount)
           if(res.data.code==1){
             // this.privilegeList=res.data.data //查询成功重新赋值列表信息
             // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -429,15 +527,21 @@
           this.showNoneAdd=true;
 
           this.id=null;//编号
-          this.cost_name=null;//费用名目
-          this.cost_money=null;//价格
-          this.activity_id=null;//活动id
-          this.activityName=null;//活动活动名称
+          this.product_id=null;//产品id
+          this.product_name=null;//产品名称
+          this.case_num=null;//每箱数量
+          this.format=null;//箱数
+          this.base_price=null;//进价
+          this.total_money=null;//总计
+          this.from_where=null;//发货地
+          this.flag_pay=null;//已还款 0 1 2
+          this.pay_money=null;//已还款
+          this.nopay_money=null;//未还款
           this.create_time=null;//创建时间
-          this.data_state=null;//状态 
-
-            this.$axios({  
-              url: '/api/ProductManager/ActivityAllList',
+          this.update_time=null;//更新时间
+          this.data_state=null;//状态
+          this.$axios({  
+              url: '/api/ProductManager/ProductAllList',
               method: 'get',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
@@ -448,7 +552,7 @@
             })
             .then((res)=>{
               if(res.data.code==1){
-                this.editNewList=res.data.data;//查询成功 赋值活动列表信息
+                this.editList=res.data.data;//查询成功 赋值编辑列表信息
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -460,7 +564,7 @@
             })
             .catch((err)=>{
                    console.log(err)
-            })
+            })   
       },
       //编辑
       goEdit:function(row){
@@ -471,26 +575,34 @@
         // console.log(this.row)
 
         this.id=row.id;//编号
-        this.cost_name=row.cost_name;//费用名目
-        this.cost_money=row.cost_money;//价格
-        this.activity_id=row.activity_id;//活动id
-        this.activityName=row.activityName;//活动活动名称
-        this.create_time=row.create_time;//创建时间
-        this.data_state=row.data_state;//状态
+        this.product_id=row.product_id;//产品id
+        this.product_name=row.product_name;//产品名称
+        this.case_num=row.case_num;//每箱数量
+        this.format=row.format;//箱数
+        this.base_price=row.base_price;//进价
+        this.total_money=row.total_money;//总计
+        this.from_where=row.from_where;//发货地
+        this.flag_pay=row.flag_pay;//已还款 0已还款 1部分 2结清
+        this.pay_money=row.pay_money;//已还款
+        this.nopay_money=row.nopay_money;//未还款
+        this.data_state=row.data_state;//状态 
 
-             this.$axios({  
-              url: '/api/ProductManager/ActivityAllList',
+        this.$axios({  
+              url: '/api/ProductManager/ProductAllList',
               method: 'get',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
                     Authorization:'Bearer '+token
               },
               data:{   
+                // id:row.id,             // id
               }
             })
             .then((res)=>{
               if(res.data.code==1){
-                this.editNewList=res.data.data;//查询成功 赋值新增产品列表信息
+                this.editList=res.data.data;//查询成功 赋值编辑列表信息
+                // this.privilegeList=res.data.data //查询成功重新赋值列表信息
+                // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -502,26 +614,32 @@
             })
             .catch((err)=>{
                    console.log(err)
-            })
+            })   
       },
       //保存--新增
       goKeepAdd:function(){
           let token =localStorage.getItem('g_token');
           this.$axios({  
-              url: '/api/ProductManager/ChangeOtherCost',
+              url: '/api/ProductManager/ChangeBuyGoodsD',
               method: 'post',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
                     Authorization:'Bearer '+token
               },
-              data:{ 
-                activity_id:this.activity_id,//活动活动名称id
-                cost_name:this.cost_name,//费用名目
-                cost_money:Number(this.cost_money),//金额
+              data:{   
+                product_id:Number(this.product_id),             // 产品名称
+                case_num:Number(this.case_num),             // 每箱数量
+                format:Number(this.format),             // 箱数
+                base_price:Number(this.base_price),             // 进价
+                from_where:this.from_where,             // 发货地
+                flag_pay:Number(this.flag_pay),             // 已还款
+                nopay_money:Number(this.nopay_money),             // 未还款
+                data_state: Number(this.data_state)  ,    //  状态
               }
             })
             .then((res)=>{
               // console.log(res)
+              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -542,10 +660,11 @@
       },
       //保存--编辑
       goKeepUpdate:function(){
+          console.log(this.product)
           // console.log(this.editList)
           let token =localStorage.getItem('g_token');
           this.$axios({  
-              url: '/api/ProductManager/ChangeOtherCost',
+              url: '/api/ProductManager/ChangeBuyGoodsD',
               method: 'post',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
@@ -553,9 +672,14 @@
               },
               data:{   
                 id:this.id,             // 员工编号
-                activity_id:this.activity_id,//活动活动名称id
-                cost_name:this.cost_name,//费用名目
-                cost_money:Number(this.cost_money),//金额
+                product_id:Number(this.product_id),             // 产品名称
+                case_num:Number(this.case_num),             // 每箱数量
+                format:Number(this.format),             // 箱数
+                base_price:Number(this.base_price),             // 进价
+                from_where:this.from_where,             // 发货地
+                flag_pay:Number(this.flag_pay),             // 已还款 状态
+                nopay_money:Number(this.nopay_money),             // 未还款
+                data_state: Number(this.data_state)  ,    //  状态
               }
             })
             .then((res)=>{

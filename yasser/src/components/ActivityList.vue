@@ -1,6 +1,6 @@
 <template> 
     <div class="main">
-        <div class="block" style="padding:30px 0px 30px 50px">
+        <!-- <div class="block" style="padding:30px 0px 30px 50px">
           <span class="demonstration">日期范围：</span>
           <el-date-picker
             v-model="value1"
@@ -16,12 +16,12 @@
             style="width:330px"
           ></el-input>
           <el-button type="primary" icon="el-icon-search" @click="goSearchId">搜索</el-button>
-        </div>
+        </div> -->
         <div class="block2" style="padding:30px 0px 30px 50px">
-            <el-button type="primary" icon="">批量删除</el-button>
-            <el-button type="primary" icon="">操作员列表</el-button>
-            <el-button type="primary" icon="" @click="goAdd">新增角色</el-button>
-            <!-- 共有数据  {{allCount}}  条 -->
+            <!-- <el-button type="primary" icon="el-icon-search">批量删除</el-button>
+            <el-button type="primary" icon="el-icon-search">操作员列表</el-button> -->
+            <el-button type="primary" icon="el-icon-search" @click="goAdd">添加活动</el-button>
+            共有数据  {{allCount}}  条
         </div>
 
         <div class="app-container">
@@ -34,42 +34,58 @@
                 type="selection">
               </el-table-column>
 
-              <!-- 角色编号 -->
+              <!-- 日期 -->
               <el-table-column
-                label="角色编号"
+                label="日期"
                 width=""
                 sortable
-                prop="id">
+                prop="create_time">
               </el-table-column>
-              <!-- 角色名称 -->
+              <!-- 活动名称 -->
               <el-table-column
-                label="角色名称"
+                label="活动名称"
                 width=""
                 sortable
-                prop="role_name">
+                prop="activity_name">
               </el-table-column>
-              <!-- 状态 -->
+              <!-- 产品名称 -->
               <el-table-column
-                label="状态"
-                width="150"
-                sortable
-                prop="is_del">
-              </el-table-column>
-              <!-- 操作时间 -->
-              <el-table-column
-                label="操作时间"
+                label="产品名称"
                 width=""
                 sortable
-                prop="update_time">
+                prop="productName">
               </el-table-column>
+              <!-- 每箱数量 -->
+              <el-table-column
+                label="每箱数量"
+                width=""
+                sortable
+                prop="format">
+              </el-table-column>
+              <!-- 箱数 -->
+              <el-table-column
+                label="箱数"
+                width=""
+                sortable
+                prop="case_num">
+              </el-table-column>
+              <!-- 库存数量 -->
+              <el-table-column
+                label="库存数量"
+                width=""
+                sortable
+                prop="total_num">
+              </el-table-column>
+
               <!-- 操作 -->
               <el-table-column
                 fixed="right"
                 label="操作"
                 width="">
                 <template slot-scope="scope">
-                  <el-button prop="isDel" @click="goStop(scope.row)" type="text" size="small">停/启用</el-button>
-                  <el-button type="text" size="small" @click="goEdit(scope.row)">编辑</el-button>
+                  <!-- <el-button prop="isDel" @click="goStop(scope.row)" type="text" size="small">停/启用</el-button> -->
+                  <!-- <el-button type="text" size="small" @click="goGai(scope.row)">改密</el-button> -->
+                  <el-button type="text" size="small" @click="goEdit(scope.row)">修改</el-button>
                   <el-button type="text" size="small" @click="goDelete(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
@@ -96,26 +112,35 @@
         <div class="pop" v-if="showNoneUpdate">
             <el-form   ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <!--  -->
-                <el-form-item label="角色编号" prop="id">
-                  <el-input v-model="id" placeholder="请输入角色编号" ></el-input>
+                <el-form-item label="活动名称" prop="id">
+                  <el-input v-model="Activity_name" placeholder="请输入活动名称"></el-input>
                 </el-form-item>
-                <el-form-item label="角色名称" prop="name">
-                  <el-input v-model="role_name" placeholder="请输入角色名称" size="small"></el-input>
+                <el-form-item label="产品名称" prop="id" style="text-align:left">
+                  <el-select v-model="Product_id" placeholder="">
+                    <el-option
+                      v-for="(item,index) in editList"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="状态" prop="isDel">
-                  <el-input v-model="is_del" placeholder="1停用 0启用"></el-input>
+                <el-form-item label="箱数" prop="id">
+                  <el-input v-model="Case_num" placeholder="请输入箱数（数字）" ></el-input>
                 </el-form-item>
-                <el-form-item label="角色功能">
-                  <div v-model="editNewList">
-                    <el-checkbox-group v-model="editListqq" style="text-align:left;">
-                      <el-checkbox :label="item.name" name="type" v-for="(item,index) in editList" :key="index" @change="getId(item.id)"></el-checkbox>
-                    </el-checkbox-group>
-                  </div>
+                <el-form-item label="每箱数量" prop="id">
+                  <el-input v-model="Format" placeholder="请输入每箱数量（数字）" ></el-input>
                 </el-form-item>
+                <el-form-item label="库存数量" prop="id">
+                  <el-input v-model="Total_num" placeholder="请输入库存数量（数字）" ></el-input>
+                </el-form-item>
+
+                
+
+
               <el-form-item>
-                <el-button type="primary" @click="goKeepUpdate">保存</el-button>
-                <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
-                <el-button @click="reset">关闭弹框</el-button>
+                <el-button type="primary" @click="goKeepUpdate">修改</el-button>
+                <el-button @click="reset">取消</el-button>
               </el-form-item>
             </el-form>
 
@@ -125,58 +150,108 @@
         <div class="pop" v-if="showNoneAdd">
             <el-form   ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <!--  -->
-                <el-form-item label="角色编号" prop="id">
-                  <el-input v-model="id" placeholder="请输入角色编号" :disabled="true"></el-input>
+               <el-form-item label="活动名称" prop="id">
+                  <el-input v-model="Activity_name" placeholder="请输入活动名称"></el-input>
                 </el-form-item>
-                <el-form-item label="角色名称" prop="name">
-                  <el-input v-model="role_name" placeholder="请输入角色名称" size="small"></el-input>
+                <el-form-item label="产品名称" prop="id" style="text-align:left">
+                  <el-select v-model="Product_id" placeholder="请选择">
+                    <el-option
+                      v-for="(item,index) in editList"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="状态" prop="isDel">
-                  <el-input v-model="is_del" placeholder="1停用 0启用"></el-input>
+                <el-form-item label="箱数" prop="id">
+                  <el-input v-model="Case_num" placeholder="请输入箱数（数字）" ></el-input>
                 </el-form-item>
-                <el-form-item label="角色功能">
-                  <div v-model="editNewList">
-                    <el-checkbox-group v-model="editListqq" style="text-align:left;">
-                      <el-checkbox :label="item.name" name="type" v-for="(item,index) in editList" :key="index" @change="getId(item.id)"></el-checkbox>
-                    </el-checkbox-group>
-                  </div>
+                <el-form-item label="每箱数量" prop="id">
+                  <el-input v-model="Format" placeholder="请输入每箱数量（数字）" ></el-input>
                 </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="goKeepAdd">保存</el-button>
+                <el-form-item label="库存数量" prop="id">
+                  <el-input v-model="Total_num" placeholder="请输入库存数量（数字）" ></el-input>
+                </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="goKeepAdd">添加</el-button>
+                <el-button @click="reset">取消</el-button>
+              </el-form-item>
+            </el-form>
+
+        </div>
+    <!-- 弹出框----新增 -->
+    <!-- 弹出框----改密 -->
+        <div class="pop" v-if="showNoneGai">
+            <el-form   ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <!--  -->
+                <el-form-item label="员工编号" prop="id">
+                  <el-input v-model="id" placeholder="创建自动生成员工编号" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="员工姓名" prop="id">
+                  <el-input v-model="account" placeholder="创建自动生成员工编号" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="角色名称" prop="id">
+                  <el-input v-model="role_name" placeholder="创建自动生成员工编号" :disabled="true"></el-input>
+                </el-form-item>
+                
+                <el-form-item label="密码" prop="pass">
+                  <el-input type="password" v-model="newPassword1" autocomplete="off" :show-password="true"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPass">
+                  <el-input type="password" v-model="newPassword2" autocomplete="off" :show-password="true"></el-input>
+                </el-form-item>
+                
+            <el-form-item>
+                <el-button type="primary" @click="goKeepGai">保存</el-button>
                 <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
                 <el-button @click="reset">关闭弹框</el-button>
               </el-form-item>
             </el-form>
 
         </div>
-    <!-- 弹出框----新增 -->
+    <!-- 弹出框----改密 -->
     </div>
   
 </template>
 <script>
+  import md5 from 'js-md5';
   export default {
     name: "productList",
     data() {
       return {
-        privilegeList:null,//权限列表信息
-        allCount:null,//权限列表信息zong条数
-        input: '',//搜索双向绑定
+        privilegeList:null,//产品列表信息
+        allCount:0,//权限列表信息zong条数
+        editList:null,//编辑新增查询数组
+        currentPage4:1,//当前条数
         row:null,//被点击行的数据
         showNone:false,//遮罩层的隐藏
         showNoneUpdate:false,//弹出层编辑的隐藏
         showNoneAdd:false,//弹出层新增的隐藏
-        value1: '',//搜索日期
-        currentPage4:1,//当前条数
-        editList:null,//编辑新增查询数组
-        editListqq:[],//----选中的数组name
+
         editNewList:[],//选中的数组id
+        input: '',//搜索双向绑定
+        showNoneGai:false,//弹出层改密的隐藏
+        value1: '',//搜索日期
+        editListqq:[],//----选中的数组name
         editNewListStr:'',//最终处理string
-      // -----
-      id: null ,             // 角色编号
-      role_name: null,   //   角色名称
-      is_del: null  ,    //  状态 1停用 0正常 
-      create_time: null , // 创建时间
-      update_time: null , //     更新时间
+        newPassword1:null,//修改密码值
+        newPassword2:null,//确认修改密码值
+        select_value:null,//下拉框选中的值
+        RoleId:null,//选中xia拉框的值  角色名称
+        // -----
+        textarea:null,//多选框的内容
+        aaa:[],
+        // Id，Activity_name，Product_id，Format，Case_num，Total_num，Create_time，Remarks，Data_state
+        id: null ,             // 活动编号
+        Activity_name: null,   //   活动名字
+        Product_id: null , //     产品名称
+        Format: null  ,    //  每箱数量
+        Case_num: null , // 箱数
+        Total_num: null , // 库存数量
+        create_time: null , // 创建时间select_value
+        Remarks: null , // 产品
+        Data_state: null , // 产品
       }
     },
     created() {
@@ -189,11 +264,11 @@
       
     },
     methods: {
-      //获取权限列表信息--ok
+      //获取活动列表信息--ok
       getRoleList:function(){
         let token =localStorage.getItem('g_token');
         this.$axios({  
-          url: '/api/AdminManager/RoleList?selectPageNum=1&everyPageNum=10',//&
+          url: '/api/ProductManager/ActivityList?selectPageNum=1&everyPageNum=10',
           method: 'get',
           //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -203,7 +278,6 @@
           }
         })
         .then((res)=>{
-          // console.log(res)
           if(res.data.code==1){
             this.privilegeList=res.data.data; //zong列表信息
             this.allCount=res.data.count[0].allcount; //zong条数
@@ -212,6 +286,8 @@
                 localStorage.removeItem('g_userName');
                 localStorage.removeItem('g_token');
                 this.$router.push({path: '/login'});
+          }else if(res.data.code==-1||-3){
+             this.$message(res.data.msg);
           }else{
             this.$message(res.msg);
           }
@@ -220,53 +296,14 @@
            console.log(err)
         })
       },
-      //搜索id---ok
-      goSearchId:function(){
-        let token =localStorage.getItem('g_token');
-        // console.log(this.value1)
-        if(this.value1==false){
-            this.$message("日期不能为空");
-        }else{
-            this.$axios({  ///api/AdminManager/RoleList?selectPageNum=1&everyPageNum=10&name=&startTime=2019-05-15&endTime=2019-05-16
-                url: '/api/AdminManager/RoleList?startTime='+this.value1[0]+'&endTime='+this.value1[1]+'&name='+this.input,
-                method: 'get',
-                //params参数必写 , 如果没有参数传{}也可以
-                headers:{
-                    Authorization:'Bearer '+token
-                },
-                data:{  
-                }
-                })
-                .then((res)=>{
-                // console.log(res.data)
-                // console.log(res.data.count[0].allcount)
-                if(res.data.code==1){
-                    this.$message(res.data.msg);
-                    this.privilegeList=res.data.data //查询成功重新赋值列表信息
-                    this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-                }else if(res.data.code==-1){
-                    this.$message(res.data.msg);
-                    this.privilegeList=res.data.data //查询成功重新赋值列表信息
-                    this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-                }else if(res.data.code==-4){
-                    this.$message('登录信息过期，请重新登录');
-                    localStorage.removeItem('g_userName');
-                    localStorage.removeItem('g_token');
-                    this.$router.push({path: '/login'});
-                }else{
-                    this.$message(res.data.success[0].msg);
-                }
-                })
-                .catch((err)=>{
-                    console.log(err)
-                })
-        }
-      },
       //删除一条--ok
       goDelete:function(row){
         let token =localStorage.getItem('g_token');
+        // console.log(row);
+        // console.log(this.row)
+        // console.log(222)
         this.$axios({  
-          url: '/api/AdminManager/ChangeRoleState',
+          url: '/api/ProductManager/ChangeActivityState',
           method: 'post',
         //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -278,6 +315,8 @@
           }
         })
         .then((res)=>{
+          // console.log(res.data)
+          // console.log(res.data.count[0].allcount)
           if(res.data.code==1){
             // this.privilegeList=res.data.data //查询成功重新赋值列表信息
             // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -289,78 +328,12 @@
                 localStorage.removeItem('g_token');
                 this.$router.push({path: '/login'});
           }else{
-            this.$message(res.data.success[0].msg);
+            this.$message(res.data.msg);
           }
         })
         .catch((err)=>{
             console.log(err)
         })
-      },
-      //  停用？启用   1.启用 2.停用
-      goStop:function(row){
-        let token =localStorage.getItem('g_token');
-        if(row.is_del=="启用"){
-            this.$axios({  
-              url: '/api/AdminManager/ChangeRoleState',
-              method: 'post',
-            //params参数必写 , 如果没有参数传{}也可以 
-              headers:{
-                    Authorization:'Bearer '+token
-              },
-              data:{ 
-                type:2,
-                id:row.id
-              }
-            })
-            .then((res)=>{
-              if(res.data.code==1){
-                // this.privilegeList=res.data.data //查询成功重新赋值列表信息
-                // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-                location.reload()
-              }else if(res.data.code==-4){
-              this.$message('登录信息过期，请重新登录');
-                localStorage.removeItem('g_userName');
-                localStorage.removeItem('g_token');
-                this.$router.push({path: '/login'});
-          }else{
-                this.$message(res.data.success[0].msg);
-              }
-            })
-            .catch((err)=>{
-               console.log(err)
-            })
-        }else if(row.is_del=="停用"){
-            this.$axios({  
-              url: '/api/AdminManager/ChangeRoleState',
-              method: 'post',
-            //params参数必写 , 如果没有参数传{}也可以
-              headers:{
-                    Authorization:'Bearer '+token
-              }, 
-              data:{ 
-                type:1,
-                id:row.id
-              }
-            })
-            .then((res)=>{
-              if(res.data.code==1){
-                // this.privilegeList=res.data.data //查询成功重新赋值列表信息
-                // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
-                location.reload()
-              }else if(res.data.code==-4){
-              this.$message('登录信息过期，请重新登录');
-                localStorage.removeItem('g_userName');
-                localStorage.removeItem('g_token');
-                this.$router.push({path: '/login'});
-          }else{
-                this.$message(res.data.success[0].msg);
-              }
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
-        }
-        
       },
       //新增
       goAdd:function(){
@@ -368,24 +341,30 @@
           this.showNone=true;
           this.showNoneAdd=true;
 
-          this.id=null;
-          this.role_name=null;
-          this.is_del=null;
+          this.Activity_name=null;
+          this.Product_id=null;
+          this.Format=null;
+          this.Case_num=null;
+          this.id= null;           // 活动编号
+          this.Total_num= null; // 库存数量
+          this.create_time= null; // 创建时间select_value
+          this.Remarks=null; // 产品
+          this.Data_state=null; // 产品
 
           this.$axios({  
-              url: '/api/AdminManager/GetRolePower/1',
+              url: '/api/ProductManager/ProductAllList',
               method: 'get',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
                     Authorization:'Bearer '+token
               },
               data:{   
-                // id:row.id,             // id
               }
             })
             .then((res)=>{
+              // console.log(res)
               if(res.data.code==1){
-                this.editList=res.data.data;//查询成功 赋值编辑列表信息
+                this.editList=res.data.data;//查询成功 赋值新增列表信息
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
               }else if(res.data.code==-4){
@@ -407,20 +386,26 @@
         this.showNone=true;
         this.showNoneUpdate=true;
         this.row=row;
+        // console.log(this.row)
 
-        this.id=row.id;
-        this.role_name=row.role_name;
-        this.is_del=row.is_del;
-        this.update_time=row.update_time; 
+        this.Activity_name=row.activity_name;
+        this.Product_id=row.product_id;
+        this.Format=row.format;
+        this.Case_num=row.case_num;
+        this.id= row.id;           // 活动编号
+        this.Total_num= row.total_num; // 库存数量
+        this.create_time= row.create_time; // 创建时间select_value
+        this.Remarks=row.remarks; // 产品
+        this.Data_state=row.data_state; // 产品
+
         this.$axios({  
-              url: '/api/AdminManager/GetRolePower/1',
+              url: '/api/ProductManager/ProductAllList',
               method: 'get',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
                     Authorization:'Bearer '+token
               },
               data:{   
-                id:row.id,             // id
               }
             })
             .then((res)=>{
@@ -441,39 +426,29 @@
                    console.log(err)
             })   
       },
-      //编辑--新增  多选选中获取id
-      getId:function(id){
-        // console.log(id)
-        if(this.editNewList.indexOf(id)==-1){
-            this.editNewList.push(id)
-        }else{
-            this.editNewList.splice(this.editNewList.indexOf(id), 1); 
-        }
-        // console.log(this.editNewList);
-        // console.log(this.editNewList.toString());
-        this.editNewListStr=this.editNewList.toString();//最终处理的字符串
-      },
       //保存--新增
       goKeepAdd:function(){
           let token =localStorage.getItem('g_token');
-          // console.log(this.is_del)
           this.$axios({  
-              url: '/api/AdminManager/ChangeRole',
+              url: '/api/ProductManager/ChangeActivity',
               method: 'post',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
                     Authorization:'Bearer '+token
               },
               data:{   
-                // id:this.id,             // 功能编号
-                role_name: this.role_name,   //   功能名称
-                is_del: Number(this.is_del)  ,    //  状态 1停用 0正常 
-                create_time: null , // 创建时间
-                update_time: null , //     更新时间
-                power_str:this.editNewListStr//选中id的字符串
+                  Activity_name: this.Activity_name,   //   活动名字
+                  Product_id: this.Product_id, //     产品名称
+                  Format: Number(this.Format),    //  每箱数量
+                  Case_num: Number(this.Case_num), // 箱数
+                  Total_num: Number(this.Total_num), // 库存数量
+                  Remarks: this.Remarks, // 产品
+                  Data_state: this.Data_state, // 产品
               }
             })
             .then((res)=>{
+              // console.log(res.data)
+              // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
@@ -495,21 +470,22 @@
       //保存--编辑
       goKeepUpdate:function(){
           let token =localStorage.getItem('g_token');
-          // console.log(this.is_del)
           this.$axios({  
-              url: '/api/AdminManager/ChangeRole',
+              url: '/api/ProductManager/ChangeActivity',
               method: 'post',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
                     Authorization:'Bearer '+token
               },
               data:{   
-                id:this.id,             // 功能编号
-                role_name: this.role_name,   //   功能名称
-                is_del: Number(this.is_del)  ,    //  状态 1停用 0正常 
-                create_time: null , // 创建时间
-                update_time: null , //     更新时间
-                Power_str:this.editNewListStr//选中id的字符串
+                  Id: this.id,   //   id
+                  Activity_name: this.Activity_name,   //   活动名字
+                  Product_id: this.Product_id, //     产品名称
+                  Format: Number(this.Format),    //  每箱数量
+                  Case_num: Number(this.Case_num), // 箱数
+                  Total_num: Number(this.Total_num), // 库存数量
+                  Remarks: this.Remarks, // 产品
+                  Data_state: this.Data_state, // 产品
               }
             })
             .then((res)=>{
@@ -536,16 +512,16 @@
         this.showNone=false;
         this.showNoneUpdate=false;
         this.showNoneAdd=false;
+        this.showNoneGai=false;
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
       },
-      //分页功能 点击
       handleCurrentChange(val) {
         // console.log(val);
         let token =localStorage.getItem('g_token');
         this.$axios({  
-          url: '/api/AdminManager/RoleList?selectPageNum='+val+'&everyPageNum=10',//&
+          url: '/api/ProductManager/ActivityList?selectPageNum='+val+'&everyPageNum=10',
           method: 'get',
           //params参数必写 , 如果没有参数传{}也可以
           headers:{
@@ -555,7 +531,6 @@
           }
         })
         .then((res)=>{
-          // console.log(res)
           if(res.data.code==1){
             this.privilegeList=res.data.data; //zong列表信息
             this.allCount=res.data.count[0].allcount; //zong条数
@@ -571,7 +546,6 @@
         .catch((err)=>{
            console.log(err)
         })
-        
       },
 
 
@@ -581,7 +555,7 @@
     }
   }
 </script>
-<style scoped>
+<style>
 
 
 /* .block2{
@@ -599,24 +573,24 @@
     position: relative;
 }
 .marsk{
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0; 
   width: 100%;
   height: 140%;
   background: #000;
   opacity: 0.5;
-  z-index: 9999;
+  z-index: 2999;
 }
 .pop{
   padding:2% 4%;
-  position: fixed;
+  position: absolute;
   top: 9%;
   left: 18%; 
   width: 60%;
   height: 80%;
   background: #fff;
-  z-index: 10000;
+  z-index: 3001;
 }
 </style>
 
