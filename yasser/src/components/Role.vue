@@ -106,20 +106,18 @@
                   <el-input v-model="is_del" placeholder="1停用 0启用"></el-input>
                 </el-form-item>
                 <el-form-item label="角色功能">
-                  <div v-model="editNewList">
                     <el-checkbox-group v-model="editListqq" style="text-align:left;">
-                      <el-checkbox :label="item.name" name="type" v-for="(item,index) in editList" :key="index" @change="getId(item.id)"></el-checkbox>
-                    </el-checkbox-group>
-                  </div>
+                      <el-checkbox :label="item.name" :checked="item.powerId==1?true:false" :name="index" v-for="(item,index) in editList" :key="index"></el-checkbox>
+                    </el-checkbox-group>  
                 </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="goKeepUpdate">保存</el-button>
-                <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+                <el-button type="primary" @click="resetForm">保存</el-button>
                 <el-button @click="reset">关闭弹框</el-button>
               </el-form-item>
             </el-form>
 
         </div>
+                          <!-- <div v-model="editNewList"></div> -->
     <!-- 弹出框--编辑-- -->
     <!-- 弹出框----新增 -->
         <div class="pop" v-if="showNoneAdd">
@@ -167,10 +165,13 @@
         showNoneAdd:false,//弹出层新增的隐藏
         value1: '',//搜索日期
         currentPage4:1,//当前条数
-        editList:null,//编辑新增查询数组
+        editList:[],//编辑新增查询数组
         editListqq:[],//----选中的数组name
         editNewList:[],//选中的数组id
         editNewListStr:'',//最终处理string
+        editListChange:[],//编辑 保存的数组
+        editListChangeStr:'',//编辑 保存的字符串
+
       // -----
       id: null ,             // 角色编号
       role_name: null,   //   角色名称
@@ -408,12 +409,15 @@
         this.showNoneUpdate=true;
         this.row=row;
 
+        this.editListChange=[];//编辑 保存的数组
+        this.editListChangeStr='';//编辑 保存的字符串
+
         this.id=row.id;
         this.role_name=row.role_name;
         this.is_del=row.is_del;
         this.update_time=row.update_time; 
         this.$axios({  
-              url: '/api/AdminManager/GetRolePower/1',
+              url: '/api/AdminManager/GetRolePower/'+row.id,
               method: 'get',
               //params参数必写 , 如果没有参数传{}也可以 
               headers:{
@@ -509,7 +513,7 @@
                 is_del: Number(this.is_del)  ,    //  状态 1停用 0正常 
                 create_time: null , // 创建时间
                 update_time: null , //     更新时间
-                Power_str:this.editNewListStr//选中id的字符串
+                Power_str:this.editListChangeStr//选中id的字符串
               }
             })
             .then((res)=>{
@@ -517,7 +521,7 @@
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
                 // this.allCount=res.data.count[0].allcount //查询成功重新赋值zong条数
                 this.$message(res.data.msg);
-                location.reload();
+                location.reload(); 
               }else if(res.data.code==-4){
               this.$message('登录信息过期，请重新登录');
                 localStorage.removeItem('g_userName');
@@ -536,6 +540,34 @@
         this.showNone=false;
         this.showNoneUpdate=false;
         this.showNoneAdd=false;
+
+        this.editList=[]
+        this.editListqq=[]
+        this.editNewList=[]
+        // editList:[],//编辑新增查询数组
+        // editListqq:[],//----选中的数组name
+        // editNewList:[],//选中的数组id
+      },
+      resetForm:function(){
+          var cArray =this.editListqq;
+          var yArray = this.editList;
+          var that =this;
+          for(var i =0;i<cArray.length;i++){
+            // console.log(cArray[i])
+            yArray.some(function(item) {
+              if(item.name ===cArray[i]) {
+                that.editListChange.push(item.id)
+                // console.log(item)
+              	return true;
+                //则包含该元素// editListChange:[],//编辑 保存的数组// editListChangeStr:[],//编辑 保存的字符串
+              }
+            })
+          }
+          // console.log(this.editListChange);
+          that.editListChangeStr=that.editListChange.toString();
+          this.goKeepUpdate()
+          // console.log(this.editList)
+          // console.log(this.editListqq)//选中的name
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);

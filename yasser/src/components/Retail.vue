@@ -42,35 +42,35 @@
               <!-- 日期 -->
               <el-table-column
                 label="日期"
-                width="200"
+                width="80"
                 sortable
                 prop="create_time">
               </el-table-column>
               <!-- 活动 -->
               <el-table-column
                 label="活动"
-                width="100"
+                width="80"
                 sortable
                 prop="activity_name">
               </el-table-column>
               <!-- 销售额 -->
               <el-table-column
                 label="销售额（元）"
-                width="140"
+                width="120"
                 sortable
                 prop="sale_money">
               </el-table-column>
               <!-- 单价 -->
               <el-table-column
                 label="单价"
-                width="100"
+                width="80"
                 sortable
                 prop="price">
               </el-table-column>
                <!-- 销售数量 -->
               <el-table-column
                 label="销售数量"
-                width="140"
+                width="100"
                 sortable
                 prop="saleNum">
               </el-table-column>
@@ -84,21 +84,21 @@
               <!-- 员工支出金额1 -->
               <el-table-column
                 label="员工支出金额1"
-                width="150"
+                width="140"
                 sortable
                 prop="cost_money">
               </el-table-column>
               <!-- 成本支出金额2 -->
               <el-table-column
                 label="成本支出金额2"
-                width="150"
+                width="140"
                 sortable
                 prop="base_totalmoney">
               </el-table-column>
               <!-- 其他支出3 -->
               <el-table-column
                 label="其他支出3"
-                width="150"
+                width="120"
                 sortable
                 prop="other_cost_money">
               </el-table-column>
@@ -111,8 +111,9 @@
               </el-table-column>
               <!-- 余额 -->
               <el-table-column
+                fixed="right"
                 label="余额（元）"
-                width="140"
+                width="120"
                 sortable
                 prop="remaining_sum">
               </el-table-column>

@@ -102,7 +102,7 @@ a{text-decoration:none}
   /* padding-bottom: 30px; */
 }
 /*解决合计在滚动条下 */
-.el-table{
+/* .el-table{
     overflow: auto;
 }
  .el-table__header-wrapper, 
@@ -112,9 +112,9 @@ a{text-decoration:none}
     }
   .el-table__body-wrapper{
     overflow-x:visible !important;
-  }
+  } */
   /* 这个是为了解决前面样式覆盖之后伪类带出来的竖线 */
- .el-table::after{
+ /* .el-table::after{
     position: relative;
-}
+} */
 </style>

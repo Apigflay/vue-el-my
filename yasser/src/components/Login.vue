@@ -73,7 +73,7 @@
         username:null,//账号
         password:null,//密码
         code:null,//验证码
-        codeImgUrl:'http://192.168.84.170:9005/api/Auto?',//验证码获取地址
+        codeImgUrl:'http://47.99.201.159:9025/api/Auto?',//验证码获取地址192.168.84.170:9005
         codeId:null,//codeId
 
         num:1,//验证码初始url拼接数据
@@ -142,7 +142,8 @@
           }
         })
         .then((res)=>{
-          // console.log(res)
+          // console.log(res.data)
+          // console.log(res.data.code)
           // console.log(res.data.token)
           if(res.data.code==1){ 
             localStorage.setItem("g_id",res.data.count[0].id);
@@ -153,7 +154,6 @@
           }else if(res.data.code==-1){
             // localStorage.setItem("g_token",res.data.token);
             // localStorage.setItem("g_userName", 'admin');
-            // this.$cookies.set("g_userName", 'admin');
             // this.$router.push({path: '/'});
             this.$message(res.data.msg);
           }else if(res.data.code==-2){

@@ -65,14 +65,13 @@
                 <template slot-scope="scope">
                   <el-button prop="isDel" @click="goStop(scope.row)" type="text" size="small">停/启用</el-button>
                   <el-button type="text" size="small" @click="goEdit(scope.row)">编辑</el-button>
-                  <el-button type="text" size="small" @click="goDelete(scope.row)">删除</el-button>
+                  <!-- <el-button type="text" size="small" @click="goDelete(scope.row)">删除</el-button> -->
                 </template>
               </el-table-column>
             </el-table>
         </div>
         <!-- 分页 -->
-        <div class="block_fenye">
-          <!-- <span class="demonstration">完整功能</span> -->
+        <!-- <div class="block_fenye">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -82,7 +81,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="allCount">
           </el-pagination>
-        </div>
+        </div> -->
     <!-- z遮罩层 -->
         <div class="marsk" v-if="showNone_marsk"></div>
     <!-- 弹出框--编辑--新增 -->
@@ -508,12 +507,12 @@
         this.showNone_update=false;
         this.showNone_marsk=false;
       },
-      handleSizeChange(val) {
-        // console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        // console.log(val);
-      },
+      // handleSizeChange(val) {
+      //   // console.log(`每页 ${val} 条`);
+      // },
+      // handleCurrentChange(val) {
+      //   // console.log(val);
+      // },
     }
   }
 </script>

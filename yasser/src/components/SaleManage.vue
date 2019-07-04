@@ -42,7 +42,7 @@
               <!-- 日期 -->
               <el-table-column
                 label="日期"
-                min-width="100"
+                min-width="80"
                 sortable
                 prop="create_time">
               </el-table-column>
@@ -56,28 +56,28 @@
               <!-- 现金 -->
               <el-table-column
                 label="现金"
-                min-width="100"
+                min-width="80"
                 sortable
                 prop="cash">
               </el-table-column>
               <!-- 微信 -->
               <el-table-column
                 label="微信"
-                min-width="100"
+                min-width="80"
                 sortable
                 prop="wx_money">
               </el-table-column>
               <!-- 支付宝 -->
               <el-table-column
                 label="支付宝"
-                min-width="100"
+                min-width="90"
                 sortable
                 prop="zfb_money">
               </el-table-column>
               <!-- 刷卡 -->
               <el-table-column
                 label="刷卡"
-                min-width="100"
+                min-width="80"
                 sortable
                 prop="cred_card">
               </el-table-column>
@@ -105,7 +105,7 @@
               <!-- 支出项 -->
               <el-table-column
                 label="支出项"
-                min-width="100"
+                min-width="90"
                 sortable
                 prop="begin_num">
               </el-table-column>
@@ -119,28 +119,28 @@
               <!-- 活动 -->
               <el-table-column
                 label="活动"
-                min-width="100"
+                min-width="80"
                 sortable
                 prop="activityName">
               </el-table-column>
               <!-- 备注 -->
               <el-table-column
                 label="备注"
-                min-width="150"
+                min-width="100"
                 sortable
                 prop="remark">
               </el-table-column>
               <!-- 业务员 -->
               <el-table-column
                 label="业务员"
-                min-width="100"
+                min-width="90"
                 sortable
                 prop="salerName">
               </el-table-column>
               <!-- 操作 -->
               <!-- identityJudgment -->
             <el-table-column v-if="identityJudgment"
-            
+                fixed="right"
                 label="操作"
                 min-width="100">
                 <template slot-scope="scope">
@@ -890,6 +890,10 @@
 .main{
     /* flex: 1; */
     position: relative;
+}
+.app-container{
+  width:100%;
+  overflow: hidden;
 }
 .marsk{
   position: fixed;

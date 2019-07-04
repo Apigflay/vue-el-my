@@ -51,7 +51,7 @@
               <!-- 日期 -->
               <el-table-column
                 label="日期"
-                width="100"
+                width="80"
                 sortable
                 prop="create_time">
               </el-table-column>
@@ -65,7 +65,7 @@
               <!-- 箱数 -->
               <el-table-column
                 label="箱数"
-                width="100"
+                width="80"
                 sortable
                 prop="case_num">
               </el-table-column>
@@ -79,7 +79,7 @@
                <!-- 总数量 -->
               <el-table-column
                 label="总数量"
-                width="100"
+                width="90"
                 sortable
                 prop="total_num">
               </el-table-column>
@@ -121,26 +121,27 @@
                <!-- 批发人 -->
               <el-table-column
                 label="批发人"
-                width="100"
+                width="90"
                 sortable
                 prop="seller_name">
               </el-table-column>
               <!-- 已回款 -->
               <el-table-column
                 label="已回款"
-                width="100"
+                width="90"
                 sortable
                 prop="pay_money">
               </el-table-column>
               <!-- 未回款 -->
               <el-table-column
                 label="未回款"
-                width="100"
+                width="90"
                 sortable
                 prop="nopay_money">
               </el-table-column>
               <!-- 操作 -->
               <el-table-column
+                fixed="right"
                 label="操作"
                 width="100">
                 <template slot-scope="scope">

@@ -146,6 +146,9 @@
                 <el-form-item label="员工姓名" prop="id">
                   <el-input v-model="account" placeholder="请输入角色编号" ></el-input>
                 </el-form-item>
+                <el-form-item label="请确认新密码" prop="checkPass">
+                  <el-input type="password" v-model="passwd" autocomplete="off" :show-password="true"></el-input>
+                </el-form-item>
                 <el-form-item label="角色名称" prop="id" style="text-align:left">
                   <el-select v-model="select_value" placeholder="请选择" >
                     <el-option
@@ -236,6 +239,7 @@
       role_name: null , //     角色名称
       isDel: null  ,    //  状态 1停用 0正常 
       create_time: null , // 创建时间select_value
+      passwd:null,//新增的密码
       }
     },
     created() {
@@ -442,6 +446,7 @@
           this.account=null;
           this.isDel=null;
           this.update_time=null; 
+          this.passwd=null;
           this.$axios({  
               url: '/api/AdminManager/GetAdminRole',
               method: 'get',
@@ -606,11 +611,12 @@
                 // id:this.id,             // 员工编号
                 account:this.account,             // 员工名称
                 isDel: Number(this.isDel)  ,    //  状态 1停用 0正常 
-                RoleId:this.select_value//选中xia拉框的值  角色名称
+                RoleId:this.select_value,//选中xia拉框的值  角色名称
+                passwd:md5(this.passwd),//密码
               }
             })
             .then((res)=>{
-              console.log(res.data)
+              // console.log(res.data)
               // console.log(res.data.count[0].allcount)
               if(res.data.code==1){
                 // this.privilegeList=res.data.data //查询成功重新赋值列表信息
